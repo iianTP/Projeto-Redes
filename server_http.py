@@ -1,31 +1,53 @@
-import socket, threading
-from process_controller import ProcessController
+import socket
+from files_controller import FilesController
 
-h = open('index.html', 'r')
-homepage = h.read()
+class WebServer:
+	def __init__(self):
+		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.fc = FilesController()
+		self.exit = False
+		self.endpoints = {
+            'GET':[
+                ('',       self.fc.getFile), # para carregamento html inicial ( GET / HTTP/1.1 )
+                ('assets', self.fc.getFile), # para carregamento de assets da build (pode ser desnecessário depois)
+                ('files',  self.fc.getFile)  # para envio INDIVIDUAL de arquivos da pasta 'files'
+            ],
+            'POST':[
+				('shutdown', lambda: self.__setattr__('exit',True)) # fecha o servidor
+			],
+            'PUT':[],
+            'DELETE':[]
+        }
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-print(s)
-print(hex(id(s)))
+	def start(self):
 
-s.bind(('', 8080))
-# '' = binds to all interfaces
-# Binding to port 0 --> bind to a OS-assigned random port
-s.listen(5)
+		print(self.s)
+		print(hex(id(self.s)))
 
-pc = ProcessController()
+		self.s.bind(('', 8080))
+		self.s.listen(5)
 
-while not pc.exit:
-	ws, addr = s.accept()
-	print('newsock', ws)
-	print('add', addr)
-	pc.Process(ws,addr)
 
-	# t = threading.Thread(target=process_request, args=(ws, addr))
-	# t.start()
+		while not self.exit:
+			ws, addr = self.s.accept()
+			print('newsock', ws)
+			print('add', addr)
 
-ws.close()
-s.close()
+			data = ws.recv(8192)
+			P = data.split(b' ')
+			method = P[0].decode()
+			ep = P[1].decode().strip('/')
 
-# sudo fuser -i -k 8080/tcp
-# roda Wireshark (loopback:lo), roda Server, roda browser (127.0.0.1:8080), compara com index.htm
+			for prefix,func in self.endpoints[method]:
+				if ep.startswith(prefix):
+					func({'ws':ws,'ep':ep})
+					break
+			ws.close()
+
+		ws.close()
+		self.s.close()
+
+webserver = WebServer()
+webserver.start()
+
+
