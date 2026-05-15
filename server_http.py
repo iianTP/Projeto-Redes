@@ -6,6 +6,7 @@ class WebServer:
 		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.fc = FilesController()
 		self.exit = False
+
 		self.endpoints = {
             'GET':[
                 ('',       self.fc.getFile), # para carregamento html inicial ( GET / HTTP/1.1 )
@@ -13,13 +14,16 @@ class WebServer:
                 ('files',  self.fc.getFile)  # para envio INDIVIDUAL de arquivos da pasta 'files'
             ],
             'POST':[
-				('shutdown', lambda: self.__setattr__('exit',True)) # fecha o servidor
+				('shutdown', lambda _: self.__setattr__('exit',True)) # fecha o servidor
 			],
             'PUT':[],
             'DELETE':[]
         }
 
 	def start(self):
+		'''
+		Inicializa o Web Server
+		'''
 
 		print(self.s)
 		print(hex(id(self.s)))

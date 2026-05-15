@@ -1,4 +1,4 @@
-import socket
+from socket import socket
 
 class FilesController:
     def __init__(self):
@@ -13,8 +13,14 @@ class FilesController:
             'pdf':  'application/pdf'
         }
 
-    def getFile(self,req):
-        ws = req['ws']
+    def getFile(self,req:dict):
+        '''
+        Recebe a requisição e envia um arquivo único.
+
+        req : Dicionário contendo ws (socket) e o endpoint (str) -> {'ws': ws,'ep': ep}
+        '''
+
+        ws: socket = req['ws']
         path = req['ep']
 
         if path == '':
@@ -43,5 +49,10 @@ class FilesController:
             header = 'HTTP/1.1 404 Not Found\r\n\r\n'
             ws.sendall(header.encode())
             
-    def getFiles(self):
+    def getFiles(self,req:dict):
+        '''
+        Recebe a requisição e envia vários arquivos.
+
+        req : Dicionário contendo ws (socket) e o endpoint (str) -> {'ws': ws,'ep': ep}
+        '''
         pass

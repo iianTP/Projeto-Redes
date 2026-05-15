@@ -16,17 +16,16 @@ function App() {
         if (this.status === 200) {
             const blob = this.response;
             const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            //link.setAttribute('download', 'aaa.pdf');
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
+            window.open(url,'_blank');
+            //const link = document.createElement('a');
+            //document.body.appendChild(link);
+            //link.click();
+            //link.remove();
         }
     };
 
     xhr.onerror = function() {
-        console.error("Erro na conexão com o servidor Python");
+        console.error("Erro na conexão com o servidor");
     };
 
     xhr.send();
