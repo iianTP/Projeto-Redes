@@ -1,5 +1,5 @@
 import socket
-from files_controller import FilesController
+from controllers.files_controller import FilesController
 
 class WebServer:
 	def __init__(self):
@@ -7,11 +7,15 @@ class WebServer:
 		self.fc = FilesController()
 		self.exit = False
 
+		self.pages = [
+			'',
+			'aaa'
+		]
+
 		self.endpoints = {
             'GET':[
-                ('',       self.fc.getFile), # para carregamento html inicial ( GET / HTTP/1.1 )
                 ('assets', self.fc.getFile), # para carregamento de assets da build (pode ser desnecessário depois)
-                ('files',  self.fc.getFile)  # para envio INDIVIDUAL de arquivos da pasta 'files'
+                ('files',  self.fc.getFile),  # para envio INDIVIDUAL de arquivos da pasta 'files'
             ],
             'POST':[
 				('shutdown', lambda _: self.__setattr__('exit',True)) # fecha o servidor
@@ -43,9 +47,13 @@ class WebServer:
 			ep = P[1].decode().strip('/')
 
 			for prefix,func in self.endpoints[method]:
+				if ep in self.pages:
+					self.fc.getIndexHtml({'ws':ws,'ep':ep})
+					break
 				if ep.startswith(prefix):
 					func({'ws':ws,'ep':ep})
 					break
+				
 			ws.close()
 
 		ws.close()

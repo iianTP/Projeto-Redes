@@ -21,19 +21,37 @@ class FilesController:
         '''
 
         ws: socket = req['ws']
-        path = req['ep']
-
-        if path == '':
-            path += 'index.html'
+        path: str = req['ep']
     
         ext = path.split('.')[-1]
         mimetype = self.content_types.get(ext, 'text/plain')
 
-        if path.split('/')[0] in ['assets','index.html','icons.svg']:
+        if path.split('/')[0] in ['assets','icons.svg']:
             path = 'dist/'+path
 
-
         print(path)
+
+        self._send(ws,path,mimetype)
+
+            
+    def getFiles(self,req:dict):
+        '''
+        Recebe a requisição e envia vários arquivos.
+
+        req : Dicionário contendo ws (socket) e o endpoint (str) -> {'ws': ws,'ep': ep}
+        '''
+        pass
+
+    def getIndexHtml(self,req):
+        '''
+        Envia index.html para carregamento de páginas
+        '''
+        ws = req['ws']
+        path = 'dist/index.html'
+        mimetype = 'text/html'
+        self._send(ws,path,mimetype)
+
+    def _send(self,ws,path,mimetype):
         try:
             with open(path, 'rb') as f:
                 conteudo = f.read()
@@ -48,11 +66,5 @@ class FilesController:
         except FileNotFoundError:
             header = 'HTTP/1.1 404 Not Found\r\n\r\n'
             ws.sendall(header.encode())
-            
-    def getFiles(self,req:dict):
-        '''
-        Recebe a requisição e envia vários arquivos.
 
-        req : Dicionário contendo ws (socket) e o endpoint (str) -> {'ws': ws,'ep': ep}
-        '''
         pass
