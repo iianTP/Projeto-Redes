@@ -1,4 +1,5 @@
 from socket import socket
+from models import *
 
 class FilesController:
     def __init__(self):
@@ -49,6 +50,9 @@ class FilesController:
         path = 'dist/index.html'
         mimetype = 'text/html'
         self._send(ws,path,mimetype)
+
+    def teste(self,req):
+        pass
 
     def _send(self,ws:socket,path:str,mimetype:str):
         try:

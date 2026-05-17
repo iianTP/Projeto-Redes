@@ -25,7 +25,7 @@ function App() {
         <button
           type="button"
           className="counter"
-          onClick={() => api.downloadFile('files/aaa.pdf') }
+          onClick={() => api.sendData('teste',{aaa:'111',bbb:'222'})} //api.downloadFile('files/aaa.pdf') }
         >
           Count is {count}
         </button>

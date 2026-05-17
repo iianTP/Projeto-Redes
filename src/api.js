@@ -29,3 +29,8 @@ export const shutdown = () => {
     xhr.open('POST', `${url}/shutdown`, true);
     xhr.send();
 }
+
+export const sendData = (path,data) => {
+    xhr.open('POST', `${url}/${path}`, true);
+    xhr.send(JSON.stringify(data));
+}

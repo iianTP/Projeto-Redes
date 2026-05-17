@@ -1,4 +1,4 @@
-import socket
+import socket, json
 from controllers.files_controller import FilesController
 
 class WebServer:
@@ -18,7 +18,8 @@ class WebServer:
                 ('files',  self.fc.getFile),  # para envio INDIVIDUAL de arquivos da pasta 'files'
             ],
             'POST':[
-				('shutdown', lambda _: self.__setattr__('exit',True)) # fecha o servidor
+				('shutdown', lambda _: self.__setattr__('exit',True)), # fecha o servidor
+				('teste', self.fc.teste)
 			],
             'PUT':[],
             'DELETE':[]
@@ -41,7 +42,14 @@ class WebServer:
 			print('add', addr)
 
 			data = ws.recv(8192)
-			P = data.split(b' ')
+			print(data.decode())
+
+			header, body = data.split(b'\r\n\r\n',1)
+			payload = json.loads(body.decode('utf-8')) if len(body) > 0 else None
+			print(payload, type(payload))
+
+			P = header.split(b' ')
+
 			method = P[0].decode()
 			ep = P[1].decode().strip('/')
 
@@ -50,7 +58,7 @@ class WebServer:
 			else:
 				for prefix,func in self.endpoints[method]:
 					if ep.startswith(prefix):
-						func({'ws':ws,'ep':ep})
+						func({'ws':ws,'ep':ep,'pl':payload})
 						break
 
 			ws.close()
