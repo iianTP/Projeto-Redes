@@ -14,7 +14,7 @@ class WebServer:
 
 		self.endpoints = {
             'GET':[
-                ('assets', self.fc.getFile), # para carregamento de assets da build (pode ser desnecessário depois)
+                ('assets', self.fc.getFile), # para carregamento de assets da build
                 ('files',  self.fc.getFile),  # para envio INDIVIDUAL de arquivos da pasta 'files'
             ],
             'POST':[
@@ -35,7 +35,6 @@ class WebServer:
 		self.s.bind(('', 8080))
 		self.s.listen(5)
 
-
 		while not self.exit:
 			ws, addr = self.s.accept()
 			print('newsock', ws)
@@ -46,14 +45,14 @@ class WebServer:
 			method = P[0].decode()
 			ep = P[1].decode().strip('/')
 
-			for prefix,func in self.endpoints[method]:
-				if ep in self.pages:
-					self.fc.getIndexHtml({'ws':ws,'ep':ep})
-					break
-				if ep.startswith(prefix):
-					func({'ws':ws,'ep':ep})
-					break
-				
+			if ep in self.pages:
+				self.fc.getIndexHtml(ws)
+			else:
+				for prefix,func in self.endpoints[method]:
+					if ep.startswith(prefix):
+						func({'ws':ws,'ep':ep})
+						break
+
 			ws.close()
 
 		ws.close()

@@ -3,39 +3,10 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import * as api from'./api.js'
 
 function App() {
   const [count, setCount] = useState(0)
-  const xhr = new XMLHttpRequest();
-
-  const handleDownload = () => {
-    xhr.open('GET', 'http://127.0.0.1:8080/files/aaa.pdf', true);
-    xhr.responseType = 'blob';
-
-    xhr.onload = function() {
-        if (this.status === 200) {
-            const blob = this.response;
-            const url = window.URL.createObjectURL(blob);
-            window.open(url,'_blank');
-            //const link = document.createElement('a');
-            //document.body.appendChild(link);
-            //link.click();
-            //link.remove();
-        }
-    };
-
-    xhr.onerror = function() {
-        console.error("Erro na conexão com o servidor");
-    };
-
-    xhr.send();
-
-  }
-
-  const shutdown = () => {
-    xhr.open('POST', 'http://127.0.0.1:8080/shutdown', true);
-    xhr.send();
-  }
 
   return (
     <>
@@ -54,14 +25,14 @@ function App() {
         <button
           type="button"
           className="counter"
-          onClick={() => handleDownload() }// setCount((count) => count + 1)}
+          onClick={() => api.downloadFile('files/aaa.pdf') }
         >
           Count is {count}
         </button>
         <button
           type="button"
           className="counter"
-          onClick={() => shutdown() }// setCount((count) => count + 1)}
+          onClick={() => api.shutdown() }
         >
           SHUTDOWN
         </button>
@@ -111,7 +82,7 @@ function App() {
               </a>
             </li>
             <li>
-              <a href="https://chat.vite.dev/" target="_blank">
+              <a href="/aaa" target="_blank">
                 <svg
                   className="button-icon"
                   role="presentation"

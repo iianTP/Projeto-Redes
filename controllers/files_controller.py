@@ -42,16 +42,15 @@ class FilesController:
         '''
         pass
 
-    def getIndexHtml(self,req):
+    def getIndexHtml(self,ws:socket):
         '''
         Envia index.html para carregamento de páginas
         '''
-        ws = req['ws']
         path = 'dist/index.html'
         mimetype = 'text/html'
         self._send(ws,path,mimetype)
 
-    def _send(self,ws,path,mimetype):
+    def _send(self,ws:socket,path:str,mimetype:str):
         try:
             with open(path, 'rb') as f:
                 conteudo = f.read()
@@ -66,5 +65,3 @@ class FilesController:
         except FileNotFoundError:
             header = 'HTTP/1.1 404 Not Found\r\n\r\n'
             ws.sendall(header.encode())
-
-        pass
