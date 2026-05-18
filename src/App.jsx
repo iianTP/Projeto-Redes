@@ -32,7 +32,7 @@ function App() {
         <button
           type="button"
           className="counter"
-          onClick={() => api.shutdown() }
+          onClick={() => api.login({cpf:'admin1',password:'12345'}) }
         >
           SHUTDOWN
         </button>

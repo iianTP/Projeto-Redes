@@ -17,7 +17,7 @@ export const downloadFile = (path) => {
     };
 
     xhr.onerror = function() {
-        console.error("Erro na conexão com o servidor");
+        console.error('Erro na conexão com o servidor');
     };
 
     xhr.send();
@@ -32,5 +32,15 @@ export const shutdown = () => {
 
 export const sendData = (path,data) => {
     xhr.open('POST', `${url}/${path}`, true);
+    xhr.responseType = 'json';
+
+    xhr.onload = function() {
+        console.log(this.response.valid);
+    }
+
     xhr.send(JSON.stringify(data));
+}
+
+export const login = ({cpf, password}) => {
+    sendData('login',{cpf:cpf,password:password});
 }

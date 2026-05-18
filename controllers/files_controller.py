@@ -13,15 +13,22 @@ class FilesController:
             'svg':  'image/svg+xml',
             'pdf':  'application/pdf'
         }
+    
+    def _openFile(self,path):
+        try:
+            with open(path, 'rb') as f:
+                content = f.read()
+            return content, True
+        except FileNotFoundError:
+            return None, False
 
     def getFile(self,req:dict):
         '''
         Recebe a requisição e envia um arquivo único.
 
-        req : Dicionário contendo ws (socket) e o endpoint (str) -> {'ws': ws,'ep': ep}
+        req : Dicionário contendo o endpoint (str), o payload (str) e função de envio -> {'ep': endpoint, 'pl': payload, 'send': função}
         '''
 
-        ws: socket = req['ws']
         path: str = req['ep']
     
         ext = path.split('.')[-1]
@@ -32,40 +39,19 @@ class FilesController:
 
         print(path)
 
-        self._send(ws,path,mimetype)
+        content, fileFound = self._openFile(path)
+
+        req['send'](content, mimetype, fileFound)
+
+        
 
             
     def getFiles(self,req:dict):
         '''
         Recebe a requisição e envia vários arquivos.
 
-        req : Dicionário contendo ws (socket) e o endpoint (str) -> {'ws': ws,'ep': ep}
+        req : Dicionário contendo o endpoint (str), o payload (str) e função de envio -> {'ep': endpoint, 'pl': payload, 'send': função}
         '''
         pass
 
-    def getIndexHtml(self,ws:socket):
-        '''
-        Envia index.html para carregamento de páginas
-        '''
-        path = 'dist/index.html'
-        mimetype = 'text/html'
-        self._send(ws,path,mimetype)
 
-    def teste(self,req):
-        pass
-
-    def _send(self,ws:socket,path:str,mimetype:str):
-        try:
-            with open(path, 'rb') as f:
-                conteudo = f.read()
-            
-            header = (
-                'HTTP/1.1 200 OK\r\n'
-                f'Content-Type: {mimetype}\r\n'
-                f'Content-Length: {len(conteudo)}\r\n'
-                'Access-Control-Allow-Origin: *\r\n\r\n'
-            )
-            ws.sendall(header.encode() + conteudo)
-        except FileNotFoundError:
-            header = 'HTTP/1.1 404 Not Found\r\n\r\n'
-            ws.sendall(header.encode())

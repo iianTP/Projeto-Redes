@@ -1,10 +1,12 @@
 import socket, json
 from controllers.files_controller import FilesController
+from controllers.user_controller import UserController
 
 class WebServer:
 	def __init__(self):
 		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.fc = FilesController()
+		self.uc = UserController()
 		self.exit = False
 
 		self.pages = [
@@ -19,7 +21,7 @@ class WebServer:
             ],
             'POST':[
 				('shutdown', lambda _: self.__setattr__('exit',True)), # fecha o servidor
-				('teste', self.fc.teste)
+				('login', self.uc.login)
 			],
             'PUT':[],
             'DELETE':[]
@@ -46,25 +48,53 @@ class WebServer:
 
 			header, body = data.split(b'\r\n\r\n',1)
 			payload = json.loads(body.decode('utf-8')) if len(body) > 0 else None
-			print(payload, type(payload))
+			print('\n',payload)
 
 			P = header.split(b' ')
 
 			method = P[0].decode()
 			ep = P[1].decode().strip('/')
 
+			req = {
+				'ep': ep,
+				'pl': payload,
+				'send': lambda *args: self._send(ws,*args)
+			}
+
 			if ep in self.pages:
-				self.fc.getIndexHtml(ws)
+				req['ep'] = 'dist/index.html'
+				self.fc.getFile(req)
 			else:
 				for prefix,func in self.endpoints[method]:
 					if ep.startswith(prefix):
-						func({'ws':ws,'ep':ep,'pl':payload})
+						func(req)
 						break
 
 			ws.close()
 
 		ws.close()
 		self.s.close()
+
+	def _send(self,ws:socket.socket,content:bytes,mimetype:str,fileFound:bool):
+		print(type(content),content)
+		if fileFound:
+			header = (
+				f'HTTP/1.1 200 OK\r\n'
+				f'Content-Type: {mimetype}\r\n'
+				f'Content-Length: {len(content)}\r\n'
+				'Access-Control-Allow-Origin: *\r\n\r\n'
+			)
+			ws.sendall(header.encode() + content)
+		else:
+			header = 'HTTP/1.1 404 Not Found\r\n\r\n'
+			ws.sendall(header.encode())
+
+
+
+
+
+
+
 
 webserver = WebServer()
 webserver.start()
