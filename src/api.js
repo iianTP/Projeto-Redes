@@ -24,6 +24,24 @@ export const downloadFile = (path) => {
 
 }
 
+export const getEditais = (setResponse) => {
+
+    xhr.open('GET', `${url}/data/editais.json`, true);
+    xhr.responseType = 'json';
+
+    xhr.onload = function() {
+        setResponse(this.response);
+    };
+
+    xhr.onerror = function() {
+        console.error('Erro na conexão com o servidor');
+    };
+
+    xhr.send();
+
+
+}
+
 // POST
 export const shutdown = () => {
     xhr.open('POST', `${url}/shutdown`, true);

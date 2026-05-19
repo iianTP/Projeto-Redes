@@ -11,7 +11,10 @@ class WebServer:
 
 		self.pages = [
 			'',
-			'admin'
+			'admin',
+			'aaa',
+			'login',
+			'editais'
 		]
 
 		self.endpoints = {
@@ -22,6 +25,7 @@ class WebServer:
                 ('admin/editais', self.fc.listEditais),
                 ('admin/cursos', self.fc.listCursos),
                 ('admin/unidades-ensino', self.fc.listUnidadesEnsino),
+				('data/editais',self.fc.getFile)
             ],
             'POST':[
 				('shutdown', lambda _: self.__setattr__('exit',True)), # fecha o servidor

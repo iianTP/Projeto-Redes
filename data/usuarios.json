@@ -1,8 +1,10 @@
 {
     "admin1": {
-        "pw": "$2b$12$bTMVcMuOe71Xz8n7bKH0selNMASJr3ky0pP2DyJm1UsbO.tQRIdu2"
+        "pw": "$2b$12$4DVnG4K/Izgr3IdKOtXpJ.P.1xMcQx6hMCw2oL.4pVC2.btxau3Xi",
+        "isAdmin": true
     },
     "admin2": {
-        "pw": "$2b$12$E/1n7HmtixUGTWW.0sfL3.gDsEEmQGvMqPuVBHIISUM1aupbnXkMy"
+        "pw": "$2b$12$q7ek7wSSmgBskXcViZ01qOopzq.PyQyY8vmZ7ReT.4T82uUIv7qtS",
+        "isAdmin": false
     }
 }
