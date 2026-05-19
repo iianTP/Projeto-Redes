@@ -13,7 +13,7 @@ class UserController:
         user = req['pl']['cpf']
         input = req['pl']['password'].encode('utf-8')
 
-        response = {'valid': False}
+        response = {'valid': False, 'isAdmin': False}
         if user in users_dict:
             password = users_dict[user]['pw'].encode('utf-8')
             if bcrypt.checkpw(input,password):

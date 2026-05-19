@@ -11,13 +11,16 @@ class WebServer:
 
 		self.pages = [
 			'',
-			'aaa'
+			'aaa',
+			'login',
+			'editais'
 		]
 
 		self.endpoints = {
             'GET':[
                 ('assets', self.fc.getFile), # para carregamento de assets da build
                 ('files',  self.fc.getFile),  # para envio INDIVIDUAL de arquivos da pasta 'files'
+				('data/editais',self.fc.getFile)
             ],
             'POST':[
 				('shutdown', lambda _: self.__setattr__('exit',True)), # fecha o servidor
