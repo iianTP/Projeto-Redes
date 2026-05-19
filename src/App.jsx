@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
-import * as api from'./api.js'
+import * as api from './api.js'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -25,7 +26,7 @@ function App() {
         <button
           type="button"
           className="counter"
-          onClick={() => api.sendData('teste',{aaa:'111',bbb:'222'})} //api.downloadFile('files/aaa.pdf') }
+          onClick={() => api.sendData('teste',{aaa:'111',bbb:'222'})}
         >
           Count is {count}
         </button>
@@ -49,13 +50,13 @@ function App() {
           <p>Your questions, answered</p>
           <ul>
             <li>
-              <a href="/files/aaa.pdf" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
+              <Link to="/admin">
+                <img className="button-icon" src={viteLogo} alt="" />
+                Admin
+              </Link>
             </li>
             <li>
-              <a href="https://react.dev/" target="_blank">
+              <a href="https://react.dev/" target="_blank" rel="noreferrer">
                 <img className="button-icon" src={reactLogo} alt="" />
                 Learn more
               </a>
@@ -70,7 +71,7 @@ function App() {
           <p>Join the Vite community</p>
           <ul>
             <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
+              <a href="https://github.com/vitejs/vite" target="_blank" rel="noreferrer">
                 <svg
                   className="button-icon"
                   role="presentation"
@@ -82,19 +83,7 @@ function App() {
               </a>
             </li>
             <li>
-              <a href="/aaa" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
+              <a href="https://x.com/vite_js" target="_blank" rel="noreferrer">
                 <svg
                   className="button-icon"
                   role="presentation"
@@ -106,7 +95,7 @@ function App() {
               </a>
             </li>
             <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
+              <a href="https://bsky.app/profile/vite.dev" target="_blank" rel="noreferrer">
                 <svg
                   className="button-icon"
                   role="presentation"

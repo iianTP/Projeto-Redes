@@ -17,6 +17,37 @@
   }
 }
 
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: min(100%, 440px);
+}
+
+.upload-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text-h);
+  font-size: 16px;
+}
+
+.upload-form input[type='text'],
+.upload-form input[type='file'] {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 16px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.status-message {
+  margin-top: 12px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
 .hero {
   position: relative;
 
@@ -181,4 +212,34 @@
     right: 0;
     border-right-color: var(--border);
   }
+}
+
+.cadastros {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.editais-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 18px;
+  width: min(100%, 720px);
+}
+
+.editais-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.editais-list a {
+  text-decoration: none;
+  color: var(--accent);
 }
