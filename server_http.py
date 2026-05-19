@@ -21,6 +21,7 @@ class WebServer:
                 ('admin/instituicoes', self.fc.listInstituicoes),
                 ('admin/editais', self.fc.listEditais),
                 ('admin/cursos', self.fc.listCursos),
+                ('admin/unidades-ensino', self.fc.listUnidadesEnsino),
             ],
             'POST':[
 				('shutdown', lambda _: self.__setattr__('exit',True)), # fecha o servidor

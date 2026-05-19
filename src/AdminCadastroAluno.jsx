@@ -3,23 +3,23 @@ import { useNavigate } from 'react-router-dom'
 import './App.css'
 
 function AdminCadastroAluno() {
-  const [instituicoes, setInstituicoes] = useState([])
+  const [unidades_ensino, setUnidadesEnsino] = useState([])
   const [cursos, setcursos] = useState([])
 
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
-  const [instituicao, setInstituicao] = useState('')
+  const [unidade_ensino, setUnidadeEnsino] = useState('')
   const [curso, setCurso] = useState('')
   const [status, setStatus] = useState('')
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8080/admintInstituicoes')
+    fetch('http://127.0.0.1:8080/admin/unidades-ensino')
       .then((res) => res.json())
-      .then(setInstituicoes)
-      .catch(() => setStatus('Não foi possível carregar as instituições.'))
+      .then(setUnidadesEnsino)
+      .catch(() => setStatus('Não foi possível carregar as unidades de ensino.'))
 
     fetch('http://127.0.0.1:8080/admin/cursos')
       .then((res) => res.json())
@@ -100,9 +100,9 @@ function AdminCadastroAluno() {
 
         <label>
           Unidade de Ensino
-          <select value={instituicao} onChange={(e) => setInstituicao(e.target.value)}>
+          <select value={unidade_ensino} onChange={(e) => setUnidadeEnsino(e.target.value)}>
             <option value="">Selecione</option>
-            {instituicoes.map((item) => (
+            {unidades_ensino.map((item) => (
               <option key={item.nome} value={item.nome}>
                 {item.nome}
               </option>

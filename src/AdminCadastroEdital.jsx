@@ -17,19 +17,16 @@ function AdminCadastroEdital() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    // Carregar instituições
     fetch('http://127.0.0.1:8080/admin/instituicoes')
       .then((res) => res.json())
       .then(setInstituicoes)
       .catch(() => setStatus('Não foi possível carregar as instituições.'))
 
-    // Carregar cursos
     fetch('http://127.0.0.1:8080/admin/cursos')
       .then((res) => res.json())
       .then(setCursos)
       .catch(() => setStatus('Não foi possível carregar os cursos.'))
 
-    // Gerar lista de países
     const options = SelectCountryList().getData()
     const paisesNomes = options.map((item) => item.label)
     setPaises(paisesNomes)

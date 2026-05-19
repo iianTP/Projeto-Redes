@@ -100,6 +100,24 @@ class FilesController:
 
         response = json.dumps(cursos).encode('utf-8')
         req['send'](response, 'application/json', True)
+    
+    def listUnidadesEnsino(self, req:dict):
+        unidades_ensino = [
+        "Campus Recife",
+        "Campus Benfica",
+        "Campus Santo Amaro",
+        "Campus Mata Norte (Nazaré da Mata)",
+        "Campus Mata Sul (Palmares)",
+        "Campus Caruaru",
+        "Campus Garanhuns",
+        "Campus Petrolina",
+        "Campus Arcoverde",
+        "Campus Salgueiro",
+        "Campus Serra Talhada"
+        ]
+
+        response = json.dumps(unidades_ensino).encode('utf-8')
+        req['send'](response, 'application/json', True)
 
     def listPaises(self, req:dict):
         paises = [pais.name for pais in pycountry.Countries]
@@ -138,10 +156,10 @@ class FilesController:
         name = (payload.get('name') or '').strip()
         email = (payload.get('email') or '').strip()
         cpf = (payload.get('cpf') or '').strip()
-        instituicao = (payload.get('instituicao') or '').strip()
+        unidade_ensino = (payload.get('unidade_ensino') or '').strip()
         curso = (payload.get('curso') or '').strip()
 
-        if not all([name, email, cpf, instituicao, curso]):
+        if not all([name, email, cpf, unidade_ensino, curso]):
             response = json.dumps({'success': False, 'error': 'Todos os campos são obrigatórios'}).encode('utf-8')
             req['send'](response, 'application/json', True)
             return
@@ -156,7 +174,7 @@ class FilesController:
             'name': name,
             'email': email,
             'cpf': cpf,
-            'instituicao': instituicao,
+            'unidade_ensino': unidade_ensino,
             'curso': curso,
             'cadastrard_at': datetime.now().isoformat()
         }
