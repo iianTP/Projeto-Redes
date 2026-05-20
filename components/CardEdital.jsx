@@ -33,7 +33,7 @@ function CardEdital({ edital }) {
           </svg>
           Baixar PDF
         </button>
-        {!localStorage.getItem('isAdmin') && (
+        {localStorage.getItem('isAdmin') == 'false' && (
           <button style={styles.applyBtn}>
             {/* ícone candidatura */}
             <svg style={styles.iconBtn} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

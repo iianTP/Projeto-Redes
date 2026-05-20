@@ -3,7 +3,7 @@
         "pw": "$2b$12$4DVnG4K/Izgr3IdKOtXpJ.P.1xMcQx6hMCw2oL.4pVC2.btxau3Xi",
         "isAdmin": true
     },
-    "admin2": {
+    "12345": {
         "pw": "$2b$12$q7ek7wSSmgBskXcViZ01qOopzq.PyQyY8vmZ7ReT.4T82uUIv7qtS",
         "isAdmin": false
     }
