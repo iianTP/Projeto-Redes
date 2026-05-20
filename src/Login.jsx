@@ -12,7 +12,7 @@ function Login({ onLoginSuccess }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!isNaN(cpf) && !isNaN(parseFloat(cpf))) {
-      login({cpf:cpf,password:senha},setLogged,setIsAdmin)
+      login({cpf:cpf,password:senha})
       .then((res) => {
         localStorage.setItem('isAdmin',res.isAdmin)
         return res.valid

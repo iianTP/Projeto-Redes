@@ -24,21 +24,21 @@ export const downloadFile = (path) => {
 
 }
 
-export const getEditais = (setResponse) => {
+export const getEditais = () => {
+    return new Promise((resolve,reject) => {
+        xhr.open('GET', `${url}/data/editais.json`, true);
+        xhr.responseType = 'json';
 
-    xhr.open('GET', `${url}/data/editais.json`, true);
-    xhr.responseType = 'json';
+        xhr.onload = function() {
+            resolve(this.response);
+        };
 
-    xhr.onload = function() {
-        setResponse(this.response);
-    };
+        xhr.onerror = function() {
+            console.error('Erro na conexão com o servidor');
+        };
 
-    xhr.onerror = function() {
-        console.error('Erro na conexão com o servidor');
-    };
-
-    xhr.send();
-
+        xhr.send();
+    })
 
 }
 
@@ -53,7 +53,7 @@ export const sendData = (path,data) => {
     xhr.send(JSON.stringify(data));
 }
 
-export const login = ({cpf, password}, setLogged, setIsAdmin) => {
+export const login = ({cpf, password}) => {
     return new Promise((resolve,reject) => {
         xhr.open('POST', `${url}/login`, true);
         xhr.responseType = 'json';

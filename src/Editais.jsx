@@ -9,7 +9,7 @@ function Editais() {
 
   // Busca os dados dinâmicos do seu servidor Python ao carregar a página
   useEffect(() => {
-    console.log(api.getEditais(setEditais));
+    api.getEditais().then((res) => setEditais(res));
   }, []);
 
   // Lógica de filtragem no Front-end baseada no input de busca
