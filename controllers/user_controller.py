@@ -7,7 +7,7 @@ class UserController:
 
     def login(self,req):
 
-        with open('data/users.json') as f:
+        with open('data/usuarios.json') as f:
             users_dict = json.load(f)
 
         user = req['pl']['cpf']
@@ -18,6 +18,7 @@ class UserController:
             password = users_dict[user]['pw'].encode('utf-8')
             if bcrypt.checkpw(input,password):
                 response['valid'] = True
+                response['isAdmin'] = users_dict[user]['isAdmin']
         
         response = json.dumps(response).encode('utf-8')
 

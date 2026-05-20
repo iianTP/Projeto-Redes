@@ -50,15 +50,21 @@ export const shutdown = () => {
 
 export const sendData = (path,data) => {
     xhr.open('POST', `${url}/${path}`, true);
-    xhr.responseType = 'json';
-
-    xhr.onload = function() {
-        console.log(this.response.valid);
-    }
-
     xhr.send(JSON.stringify(data));
 }
 
-export const login = ({cpf, password}) => {
-    sendData('login',{cpf:cpf,password:password});
+export const login = ({cpf, password}, setLogged, setIsAdmin) => {
+    return new Promise((resolve,reject) => {
+        xhr.open('POST', `${url}/login`, true);
+        xhr.responseType = 'json';
+
+        xhr.onload = function() {
+            resolve(this.response);
+        }
+
+        xhr.send(JSON.stringify({cpf:cpf,password:password}));
+
+    })
+
+
 }

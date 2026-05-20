@@ -1,11 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { login } from './api';
+import { Link,Navigate, useNavigate } from 'react-router-dom';
 
 function Login({ onLoginSuccess }) {
   const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
 
-  const handleSubmit = () => {}
+  const navigate = useNavigate();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!isNaN(cpf) && !isNaN(parseFloat(cpf))) {
+      login({cpf:cpf,password:senha},setLogged,setIsAdmin)
+      .then((res) => {
+        localStorage.setItem('isAdmin',res.isAdmin)
+        return res.valid
+      })
+      .then((logged) => {
+        if (logged){
+          navigate('/editais');
+        }
+      })
+    }
+  }
+
   
   return (
     <div style={styles.container}>
@@ -22,7 +41,7 @@ function Login({ onLoginSuccess }) {
         <h2 style={styles.titulo}>Portal de Intercâmbio</h2>
         <p style={styles.subtitulo}>Acesse com seu CPF e senha para ver os editais</p>
 
-        <form onSubmit={handleSubmit} style={styles.form}>
+        <form onSubmit={(e) => handleSubmit(e)} style={styles.form}>
           
           {/* Campo CPF */}
           <div style={styles.inputGroup}>
