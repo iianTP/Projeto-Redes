@@ -1,5 +1,5 @@
 
-const url = 'http://127.0.0.1:8080';
+const url = `http://${window.location.href.split('/')[2]}`;
 const xhr = new XMLHttpRequest();
 
 // GET

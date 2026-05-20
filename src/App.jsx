@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
@@ -8,6 +8,10 @@ import * as api from './api.js'
 
 function App() {
   const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    console.log(window.location.href)
+  },[])
 
   return (
     <>

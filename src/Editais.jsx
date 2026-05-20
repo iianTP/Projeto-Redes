@@ -10,7 +10,6 @@ function Editais() {
   // Busca os dados dinâmicos do seu servidor Python ao carregar a página
   useEffect(() => {
     api.getEditais().then((res) => setEditais(res));
-    console.log(localStorage.getItem('isAdmin'));
   }, []);
 
   // Lógica de filtragem no Front-end baseada no input de busca
@@ -38,8 +37,8 @@ function Editais() {
         )}
 
         <button style={styles.logoutBtn} onClick={() => {
-            localStorage.clear()
-            window.location.href = '/login'
+            localStorage.clear();
+            window.location.href = '/login';
           }}>
           <svg style={styles.logoutIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
