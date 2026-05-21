@@ -64,60 +64,60 @@ class FilesController:
         response = json.dumps(instituicoes).encode('utf-8')
         req['send'](response, 'application/json', True)
 
-    def listCursos(self, req:dict):
-        cursos = [
-        "Medicina",
-        "Odontologia",
-        "Enfermagem",
-        "Fisioterapia",
-        "Nutrição",
-        "Psicologia",
-        "Educação Física",
-        "Saúde Coletiva",
-        "Terapia Ocupacional",
-        "Engenharia Civil",
-        "Engenharia Mecânica",
-        "Engenharia Elétrica (eletrônica, telecomunicações, eletrotécnica)",
-        "Engenharia da Computação",
-        "Engenharia de Controle e Automação",
-        "Engenharia de Software",
-        "Sistemas de Informação",
-        "Ciência da Computação",
-        "Tecnologia em Logística",
-        "Direito",
-        "Administração",
-        "Administração Pública EAD",
-        "Serviço Social",
-        "Ciências Sociais",
-        "História",
-        "Geografia",
-        "Pedagogia",
-        "Letras",
-        "Ciências Biológicas",
-        "Química",
-        "Física"
-        ]
+    # def listCursos(self, req:dict):
+    #     cursos = [
+    #     "Medicina",
+    #     "Odontologia",
+    #     "Enfermagem",
+    #     "Fisioterapia",
+    #     "Nutrição",
+    #     "Psicologia",
+    #     "Educação Física",
+    #     "Saúde Coletiva",
+    #     "Terapia Ocupacional",
+    #     "Engenharia Civil",
+    #     "Engenharia Mecânica",
+    #     "Engenharia Elétrica (eletrônica, telecomunicações, eletrotécnica)",
+    #     "Engenharia da Computação",
+    #     "Engenharia de Controle e Automação",
+    #     "Engenharia de Software",
+    #     "Sistemas de Informação",
+    #     "Ciência da Computação",
+    #     "Tecnologia em Logística",
+    #     "Direito",
+    #     "Administração",
+    #     "Administração Pública EAD",
+    #     "Serviço Social",
+    #     "Ciências Sociais",
+    #     "História",
+    #     "Geografia",
+    #     "Pedagogia",
+    #     "Letras",
+    #     "Ciências Biológicas",
+    #     "Química",
+    #     "Física"
+    #     ]
 
-        response = json.dumps(cursos).encode('utf-8')
-        req['send'](response, 'application/json', True)
+    #     response = json.dumps(cursos).encode('utf-8')
+    #     req['send'](response, 'application/json', True)
     
-    def listUnidadesEnsino(self, req:dict):
-        unidades_ensino = [
-        "Campus Recife",
-        "Campus Benfica",
-        "Campus Santo Amaro",
-        "Campus Mata Norte (Nazaré da Mata)",
-        "Campus Mata Sul (Palmares)",
-        "Campus Caruaru",
-        "Campus Garanhuns",
-        "Campus Petrolina",
-        "Campus Arcoverde",
-        "Campus Salgueiro",
-        "Campus Serra Talhada"
-        ]
+    # def listUnidadesEnsino(self, req:dict):
+    #     unidades_ensino = [
+    #     "Campus Recife",
+    #     "Campus Benfica",
+    #     "Campus Santo Amaro",
+    #     "Campus Mata Norte (Nazaré da Mata)",
+    #     "Campus Mata Sul (Palmares)",
+    #     "Campus Caruaru",
+    #     "Campus Garanhuns",
+    #     "Campus Petrolina",
+    #     "Campus Arcoverde",
+    #     "Campus Salgueiro",
+    #     "Campus Serra Talhada"
+    #     ]
 
-        response = json.dumps(unidades_ensino).encode('utf-8')
-        req['send'](response, 'application/json', True)
+    #     response = json.dumps(unidades_ensino).encode('utf-8')
+    #     req['send'](response, 'application/json', True)
 
     def listPaises(self, req:dict):
         paises = [pais.name for pais in pycountry.Countries]
@@ -129,60 +129,60 @@ class FilesController:
         response = json.dumps(editais).encode('utf-8')
         req['send'](response, 'application/json', True)
 
-    def cadastrarInstituicao(self, req:dict):
-        payload = req.get('pl') or {}
-        name = (payload.get('name') or '').strip()
+    # def cadastrarInstituicao(self, req:dict):
+    #     payload = req.get('pl') or {}
+    #     name = (payload.get('name') or '').strip()
 
-        if not name:
-            response = json.dumps({'success': False, 'error': 'Nome da instituição obrigatório'}).encode('utf-8')
-            req['send'](response, 'application/json', True)
-            return
+    #     if not name:
+    #         response = json.dumps({'success': False, 'error': 'Nome da instituição obrigatório'}).encode('utf-8')
+    #         req['send'](response, 'application/json', True)
+    #         return
 
-        instituicoes = self._load_json('data/instituicoes.json', [])
-        if any(inst.get('name', '').lower() == name.lower() for inst in instituicoes):
-            response = json.dumps({'success': False, 'error': 'Instituição já cadastrada'}).encode('utf-8')
-            req['send'](response, 'application/json', True)
-            return
+    #     instituicoes = self._load_json('data/instituicoes.json', [])
+    #     if any(inst.get('name', '').lower() == name.lower() for inst in instituicoes):
+    #         response = json.dumps({'success': False, 'error': 'Instituição já cadastrada'}).encode('utf-8')
+    #         req['send'](response, 'application/json', True)
+    #         return
 
-        instituicao = {'name': name, 'cadastrard_at': datetime.now().isoformat()}
-        instituicoes.append(instituicao)
-        self._save_json('data/instituicoes.json', instituicoes)
+    #     instituicao = {'name': name, 'cadastrard_at': datetime.now().isoformat()}
+    #     instituicoes.append(instituicao)
+    #     self._save_json('data/instituicoes.json', instituicoes)
 
-        response = json.dumps({'success': True, 'instituicao': instituicao}).encode('utf-8')
-        req['send'](response, 'application/json', True)
+    #     response = json.dumps({'success': True, 'instituicao': instituicao}).encode('utf-8')
+    #     req['send'](response, 'application/json', True)
 
-    def cadastrarAluno(self, req:dict):
-        payload = req.get('pl') or {}
-        name = (payload.get('name') or '').strip()
-        email = (payload.get('email') or '').strip()
-        cpf = (payload.get('cpf') or '').strip()
-        unidade_ensino = (payload.get('unidade_ensino') or '').strip()
-        curso = (payload.get('curso') or '').strip()
+    # def cadastrarAluno(self, req:dict):
+    #     payload = req.get('pl') or {}
+    #     name = (payload.get('name') or '').strip()
+    #     email = (payload.get('email') or '').strip()
+    #     cpf = (payload.get('cpf') or '').strip()
+    #     unidade_ensino = (payload.get('unidade_ensino') or '').strip()
+    #     curso = (payload.get('curso') or '').strip()
 
-        if not all([name, email, cpf, unidade_ensino, curso]):
-            response = json.dumps({'success': False, 'error': 'Todos os campos são obrigatórios'}).encode('utf-8')
-            req['send'](response, 'application/json', True)
-            return
+    #     if not all([name, email, cpf, unidade_ensino, curso]):
+    #         response = json.dumps({'success': False, 'error': 'Todos os campos são obrigatórios'}).encode('utf-8')
+    #         req['send'](response, 'application/json', True)
+    #         return
 
-        alunos = self._load_json('data/alunos.json', [])
-        if any(aluno.get('cpf') == cpf for aluno in alunos):
-            response = json.dumps({'success': False, 'error': 'CPF já cadastrado'}).encode('utf-8')
-            req['send'](response, 'application/json', True)
-            return
+    #     alunos = self._load_json('data/alunos.json', [])
+    #     if any(aluno.get('cpf') == cpf for aluno in alunos):
+    #         response = json.dumps({'success': False, 'error': 'CPF já cadastrado'}).encode('utf-8')
+    #         req['send'](response, 'application/json', True)
+    #         return
 
-        aluno = {
-            'name': name,
-            'email': email,
-            'cpf': cpf,
-            'unidade_ensino': unidade_ensino,
-            'curso': curso,
-            'cadastrard_at': datetime.now().isoformat()
-        }
-        alunos.append(aluno)
-        self._save_json('data/alunos.json', alunos)
+    #     aluno = {
+    #         'name': name,
+    #         'email': email,
+    #         'cpf': cpf,
+    #         'unidade_ensino': unidade_ensino,
+    #         'curso': curso,
+    #         'cadastrard_at': datetime.now().isoformat()
+    #     }
+    #     alunos.append(aluno)
+    #     self._save_json('data/alunos.json', alunos)
 
-        response = json.dumps({'success': True, 'aluno': aluno}).encode('utf-8')
-        req['send'](response, 'application/json', True)
+    #     response = json.dumps({'success': True, 'aluno': aluno}).encode('utf-8')
+    #     req['send'](response, 'application/json', True)
 
     def cadastrarEdital(self, req:dict):
         payload = req.get('pl') or {}

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './App.css'
+import { getData, sendData } from './api'
 
 function AdminCadastroAluno() {
   const [unidades_ensino, setUnidadesEnsino] = useState([])
-  const [cursos, setcursos] = useState([])
+  const [cursos, setCursos] = useState([])
 
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
@@ -15,50 +16,74 @@ function AdminCadastroAluno() {
 
   const navigate = useNavigate()
 
-  useEffect(() => {
-    fetch('http://127.0.0.1:8080/admin/unidades-ensino')
-      .then((res) => res.json())
-      .then(setUnidadesEnsino)
-      .catch(() => setStatus('Não foi possível carregar as unidades de ensino.'))
+  useEffect(async () => {
 
-    fetch('http://127.0.0.1:8080/admin/cursos')
-      .then((res) => res.json())
-      .then(setcursos)
-      .catch(() => setStatus('Não foi possível carregar os cursos.'))
+    await getData('unidades-ensino.json')
+    .then(setUnidadesEnsino)
+    .catch(() => {setStatus('Não foi possível carregar as unidades de ensino.')})
+
+    await getData('cursos.json')
+    .then(setCursos)
+    .catch(() => setStatus('Não foi possível carregar os cursos.'))
+
+    // fetch('http://127.0.0.1:8080/admin/unidades-ensino')
+    //   .then((res) => res.json())
+    //   .then(setUnidadesEnsino)
+    //   .catch(() => setStatus('Não foi possível carregar as unidades de ensino.'))
+
+    // fetch('http://127.0.0.1:8080/admin/cursos')
+    //   .then((res) => res.json())
+    //   .then(setcursos)
+    //   .catch(() => setStatus('Não foi possível carregar os cursos.'))
+
   }, [])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
 
-    if (!nome.trim() || !email.trim() || !cpf.trim() || !instituicao || !curso) {
+    if (!nome.trim() || !email.trim() || !cpf.trim() || !unidade_ensino || !curso) {
       setStatus('Preencha todos os campos obrigatórios.')
       return
     }
 
-    const formData = new FormData()
-    formData.append('nome', nome)
-    formData.append('email', email)
-    formData.append('cpf', cpf)
-    formData.append('instituicao', instituicao)
-    formData.append('curso', curso)
-
-    try {
-      const response = await fetch('http://127.0.0.1:8080/admin/cadastrar-aluno', {
-        method: 'POST',
-        body: formData,
-      })
-      const result = await response.json()
-
-      if (result.success) {
-        setStatus('Aluno cadastrado com sucesso.')
-        navigate('/admin')
-      } else {
-        setStatus(`Falha: ${result.error || 'erro desconhecido'}`)
-      }
-    } catch (error) {
-      setStatus('Erro de conexão com o servidor.')
-      console.error(error)
+    var aluno = {
+      nome: nome,
+      email: email,
+      cpf: cpf,
+      instituicao: unidade_ensino,
+      curso: curso
     }
+
+    sendData('admin/cadastrar-aluno',aluno)
+    .then()
+    .catch(err => setStatus(`Falha: {}`))
+
+
+    // const formData = new FormData()
+    // formData.append('nome', nome)
+    // formData.append('email', email)
+    // formData.append('cpf', cpf)
+    // formData.append('instituicao', instituicao)
+    // formData.append('curso', curso)
+
+    // try {
+    //   const response = await fetch('http://127.0.0.1:8080/admin/cadastrar-aluno', {
+    //     method: 'POST',
+    //     body: formData,
+    //   })
+    //   const result = await response.json()
+
+    //   if (result.success) {
+    //     setStatus('Aluno cadastrado com sucesso.')
+    //     navigate('/admin')
+    //   } else {
+    //     setStatus(`Falha: ${result.error || 'erro desconhecido'}`)
+    //   }
+    // } catch (error) {
+    //   setStatus('Erro de conexão com o servidor.')
+    //   console.error(error)
+    // }
+
   }
 
   return (
@@ -93,7 +118,7 @@ function AdminCadastroAluno() {
           <input
             type="text"
             value={cpf}
-            onChange={(e) => setCPF(e.target.value.replace(/\D/g, ''))}
+            onChange={(e) => setCpf(e.target.value.replace(/\D/g, ''))}
             placeholder="Somente números"
           />
         </label>
@@ -103,8 +128,8 @@ function AdminCadastroAluno() {
           <select value={unidade_ensino} onChange={(e) => setUnidadeEnsino(e.target.value)}>
             <option value="">Selecione</option>
             {unidades_ensino.map((item) => (
-              <option key={item.nome} value={item.nome}>
-                {item.nome}
+              <option key={item} value={item}>
+                {item}
               </option>
             ))}
           </select>

@@ -1,1 +1,29 @@
-[]
+{
+  "234567123": {
+    "nome": "fsdfsd",
+    "email": "wefe@famsd.dso",
+    "instituicao": "Campus Benfica",
+    "curso": "Engenharia Mecânica"
+  },
+  "123123123": {
+    "nome": "wqvdgb",
+    "email": "asd@dswdd.wd",
+    "cpf": "123123123",
+    "instituicao": "Campus Benfica",
+    "curso": "Terapia Ocupacional"
+  },
+  "1231231232": {
+    "nome": "wqvdgb",
+    "email": "asd@dswdd.wd",
+    "cpf": "1231231232",
+    "instituicao": "Campus Benfica",
+    "curso": "Terapia Ocupacional"
+  },
+  "123678": {
+    "nome": "wqvdgb",
+    "email": "asd@dswdd.wd",
+    "cpf": "123678",
+    "instituicao": "Campus Benfica",
+    "curso": "Terapia Ocupacional"
+  }
+}

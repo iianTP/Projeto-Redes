@@ -17,9 +17,8 @@ function AdminCadastroInstituicao() {
     }
 
     sendData('admin/cadastrar-instituicao',{name:nome})
-    .then(() => {
-      setStatus('Instituição cadastrada com sucesso.')
-      navigate('/admin')
+    .then(res => {
+      setStatus(res.msg);
     })
     .catch(err => {
       setStatus(`Falha: ${err.message}`)

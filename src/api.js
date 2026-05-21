@@ -24,6 +24,24 @@ export const downloadFile = (path) => {
 
 }
 
+export const getData = (data) => {
+    return new Promise((resolve,reject) => {
+        xhr.open('GET', `${url}/data/${data}`, true);
+        xhr.responseType = 'json';
+
+        xhr.onload = function() {
+            resolve(this.response);
+        };
+
+        xhr.onerror = function() {
+            console.error('Erro na conexão com o servidor');
+        };
+
+        xhr.send();
+    })
+
+}
+
 export const getEditais = () => {
     return new Promise((resolve,reject) => {
         xhr.open('GET', `${url}/data/editais.json`, true);
@@ -57,6 +75,8 @@ export const sendData = (path,data) => {
             if (!this.response.success) {
                 console.log(this.response)
                 reject(new Error(this.response.error))
+            } else {
+                resolve(this.response);
             }
         }
 

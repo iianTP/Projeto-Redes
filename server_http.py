@@ -25,16 +25,16 @@ class WebServer:
                 ('files',  self.fc.getFile),  # para envio INDIVIDUAL de arquivos da pasta 'files'
                 ('admin/instituicoes', self.fc.listInstituicoes),
                 ('admin/editais', self.fc.listEditais),
-                ('admin/cursos', self.fc.listCursos),
-                ('admin/unidades-ensino', self.fc.listUnidadesEnsino),
-				('data/editais',self.fc.getFile)
+                #('admin/cursos', self.fc.listCursos),
+                #('admin/unidades-ensino', self.fc.listUnidadesEnsino),
+				('data',self.fc.getFile)
             ],
             'POST':[
 				('shutdown', lambda _: self.__setattr__('exit',True)), # fecha o servidor
 				('login', self.uc.login),
 				('upload', self.fc.saveUpload),
-				('admin/cadastrar-edital', self.fc.cadastrarEdital),
-				('admin/cadastrar-aluno', self.fc.cadastrarAluno),
+				('admin/cadastrar-edital', self.cc.cadastrarEdital),
+				('admin/cadastrar-aluno', self.cc.cadastrarAluno),
 				('admin/cadastrar-instituicao', self.cc.cadastrarInstituicao),
 			],
             'PUT':[],
