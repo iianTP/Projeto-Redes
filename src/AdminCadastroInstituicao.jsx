@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './App.css'
+import { sendData } from './api'
 
 function AdminCadastroInstituicao() {
   const [nome, setNome] = useState('')
@@ -11,30 +12,41 @@ function AdminCadastroInstituicao() {
     event.preventDefault()
 
     if (!nome.trim()) {
-      setStatus('Informe o nome da instituição.')
+      setStatus('Informe o nome da instituição.');
       return
     }
 
-    const formData = new FormData()
-    formData.append('Nome', nome)
+    sendData('admin/cadastrar-instituicao',{name:nome})
+    .then(() => {
+      setStatus('Instituição cadastrada com sucesso.')
+      navigate('/admin')
+    })
+    .catch(err => {
+      setStatus(`Falha: ${err.message}`)
+    });
 
-    try {
-      const response = await fetch('http://127.0.0.1:8080/admin/cadastrar-instituicao', {
-        method: 'POST',
-        body: formData,
-      })
-      const result = await response.json()
+    // const formData = new FormData()
+    // formData.append('Nome', nome)
 
-      if (result.success) {
-        setStatus('Instituição cadastrada com sucesso.')
-        navigate('/admin')
-      } else {
-        setStatus(`Falha: ${result.error || 'erro desconhecido'}`)
-      }
-    } catch (error) {
-      setStatus('Erro de conexão com o servidor.')
-      console.error(error)
-    }
+    // try {
+    //   const response = await fetch('http://127.0.0.1:8080/admin/cadastrar-instituicao', {
+    //     method: 'POST',
+    //     body: formData,
+    //   })
+    //   const result = await response.json()
+
+    //   if (result.success) {
+    //     setStatus('Instituição cadastrada com sucesso.')
+    //     navigate('/admin')
+    //   } else {
+    //     setStatus(`Falha: ${result.error || 'erro desconhecido'}`)
+    //   }
+    // } catch (error) {
+    //   setStatus('Erro de conexão com o servidor.')
+    //   console.error(error)
+    // }
+
+
   }
 
   return (

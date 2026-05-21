@@ -49,8 +49,19 @@ export const shutdown = () => {
 }
 
 export const sendData = (path,data) => {
-    xhr.open('POST', `${url}/${path}`, true);
-    xhr.send(JSON.stringify(data));
+    return new Promise((resolve,reject) => {
+        xhr.open('POST', `${url}/${path}`, true);
+        xhr.responseType = 'json';
+
+        xhr.onload = function() {
+            if (!this.response.success) {
+                console.log(this.response)
+                reject(new Error(this.response.error))
+            }
+        }
+
+        xhr.send(JSON.stringify(data));
+    })
 }
 
 export const login = ({cpf, password}) => {

@@ -1,12 +1,14 @@
 import socket, json
 from controllers.files_controller import FilesController
 from controllers.user_controller import UserController
+from controllers.cadastro_controller import CadastroController
 
 class WebServer:
 	def __init__(self):
 		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.fc = FilesController()
 		self.uc = UserController()
+		self.cc = CadastroController()
 		self.exit = False
 
 		self.pages = [
@@ -33,7 +35,7 @@ class WebServer:
 				('upload', self.fc.saveUpload),
 				('admin/cadastrar-edital', self.fc.cadastrarEdital),
 				('admin/cadastrar-aluno', self.fc.cadastrarAluno),
-				('admin/cadastrar-instituicao', self.fc.cadastrarInstituicao),
+				('admin/cadastrar-instituicao', self.cc.cadastrarInstituicao),
 			],
             'PUT':[],
             'DELETE':[]
