@@ -70,13 +70,14 @@ function AdminCadastroEdital() {
       dataFim: "dd/mm/yyyy"
     }
 
-    await sendData('admin/cadastrar-edital', edital)
-    .then()
+    sendData('admin/cadastrar-edital', edital)
+    .then(() => {
+      sendFile(pdf)
+      .catch(err => setStatus(`Falha: {}`))
+    })
     .catch(err => setStatus(`Falha: {}`))
 
-    await sendFile(pdf)
-    .then()
-    .catch(err => setStatus(`Falha: {}`))
+
 
     // const formData = new FormData()
     // formData.append('instituicao', instituicao)

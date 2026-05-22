@@ -58,11 +58,25 @@ class FilesController:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
+    
+    def saveUpload(self, req:dict):
 
-    def listInstituicoes(self, req:dict):
-        instituicoes = self._load_json('data/instituicoes.json', [])
-        response = json.dumps(instituicoes).encode('utf-8')
-        req['send'](response, 'application/json', True)
+        payload = req['pl']
+
+        filename = payload['filename']
+        file = payload['file']
+
+        with open(f'files/{filename}','wb') as f:
+            f.write(file)
+
+        res = json.dumps({'success': True, 'msg': 'Arquivo salvo com sucesso.'})
+        req['send'](res,'application/json',True)
+
+    
+    # def listInstituicoes(self, req:dict):
+    #     instituicoes = self._load_json('data/instituicoes.json', [])
+    #     response = json.dumps(instituicoes).encode('utf-8')
+    #     req['send'](response, 'application/json', True)
 
     # def listCursos(self, req:dict):
     #     cursos = [
@@ -124,10 +138,10 @@ class FilesController:
     #     response = json.dumps(paises).encode('utf-8')
     #     req['send'](response, 'application/json', True)
 
-    def listEditais(self, req:dict):
-        editais = self._load_json('data/editais.json', [])
-        response = json.dumps(editais).encode('utf-8')
-        req['send'](response, 'application/json', True)
+    # def listEditais(self, req:dict):
+    #     editais = self._load_json('data/editais.json', [])
+    #     response = json.dumps(editais).encode('utf-8')
+    #     req['send'](response, 'application/json', True)
 
     # def cadastrarInstituicao(self, req:dict):
     #     payload = req.get('pl') or {}
@@ -232,19 +246,7 @@ class FilesController:
     #     response = json.dumps({'success': True, 'edital': entry}).encode('utf-8')
     #     req['send'](response, 'application/json', True)
 
-    def saveUpload(self, req:dict):
-
-        payload = req['pl']
-
-        filename = payload['filename']
-        file = payload['file']
-
-        with open(f'files/{filename}','wb') as f:
-            f.write(file)
-
-        res = json.dumps({'success': True, 'msg': 'Arquivo salvo com sucesso.'})
-        req['send'](res,'application/json',True)
-
+    # def saveUpload(self, req:dict):
         # payload = req.get('pl') or {}
         # instituicao = (payload.get('instituicao') or '').strip()
         # file_data = payload.get('file')
