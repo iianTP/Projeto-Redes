@@ -18,6 +18,10 @@ function AdminCadastroAluno() {
 
   useEffect(async () => {
 
+    if (localStorage.getItem('isAdmin') != 'true') {
+      navigate('/editais')
+    }
+
     await getData('unidades-ensino.json')
     .then(setUnidadesEnsino)
     .catch(() => {setStatus('Não foi possível carregar as unidades de ensino.')})

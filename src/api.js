@@ -97,5 +97,20 @@ export const login = ({cpf, password}) => {
 
     })
 
+}
 
+export const sendFile = (file) => {
+    return new Promise((resolve,reject) => {
+        xhr.open('POST', `${url}/upload`, true);
+        xhr.responseType = 'json';
+
+        xhr.setRequestHeader('X-File-Name', encodeURIComponent(file.name))
+        xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream')
+
+        xhr.onload = function() {
+            resolve(this.response);
+        }
+
+        xhr.send(file);
+    })
 }

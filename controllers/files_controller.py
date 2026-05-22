@@ -119,10 +119,10 @@ class FilesController:
     #     response = json.dumps(unidades_ensino).encode('utf-8')
     #     req['send'](response, 'application/json', True)
 
-    def listPaises(self, req:dict):
-        paises = [pais.name for pais in pycountry.Countries]
-        response = json.dumps(paises).encode('utf-8')
-        req['send'](response, 'application/json', True)
+    # def listPaises(self, req:dict):
+    #     paises = [pais.name for pais in pycountry.Countries]
+    #     response = json.dumps(paises).encode('utf-8')
+    #     req['send'](response, 'application/json', True)
 
     def listEditais(self, req:dict):
         editais = self._load_json('data/editais.json', [])
@@ -184,108 +184,112 @@ class FilesController:
     #     response = json.dumps({'success': True, 'aluno': aluno}).encode('utf-8')
     #     req['send'](response, 'application/json', True)
 
-    def cadastrarEdital(self, req:dict):
-        payload = req.get('pl') or {}
-        instituicao = (payload.get('instituicao') or '').strip()
-        pais = (payload.get('pais') or '').strip()
-        cursos_aceitos = payload.get('cursos_aceitos') or []
-        file_data = payload.get('pdf')
+    # def cadastrarEdital(self, req:dict):
+    #     payload = req.get('pl') or {}
+    #     instituicao = (payload.get('instituicao') or '').strip()
+    #     pais = (payload.get('pais') or '').strip()
+    #     cursos_aceitos = payload.get('cursos_aceitos') or []
+    #     file_data = payload.get('pdf')
 
-        if isinstance(cursos_aceitos, str):
-            try:
-                cursos_aceitos = json.loads(cursos_aceitos)
-            except json.JSONDecodeError:
-                cursos_aceitos = [cursos_aceitos]
+    #     if isinstance(cursos_aceitos, str):
+    #         try:
+    #             cursos_aceitos = json.loads(cursos_aceitos)
+    #         except json.JSONDecodeError:
+    #             cursos_aceitos = [cursos_aceitos]
 
-        if not instituicao or not pais or not file_data or not file_data.get('content'):
-            response = json.dumps({'success': False, 'error': 'Todos os campos obrigatórios devem ser preenchidos'}).encode('utf-8')
-            req['send'](response, 'application/json', True)
-            return
+    #     if not instituicao or not pais or not file_data or not file_data.get('content'):
+    #         response = json.dumps({'success': False, 'error': 'Todos os campos obrigatórios devem ser preenchidos'}).encode('utf-8')
+    #         req['send'](response, 'application/json', True)
+    #         return
 
-        safe_name = os.path.basename(file_data.get('filename', 'edital.pdf'))
-        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-        stored_name = f'{timestamp}_{safe_name}'
-        storage_path = os.path.join('files', stored_name)
+    #     safe_name = os.path.basename(file_data.get('filename', 'edital.pdf'))
+    #     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+    #     stored_name = f'{timestamp}_{safe_name}'
+    #     storage_path = os.path.join('files', stored_name)
 
-        try:
-            os.makedirs(os.path.dirname(storage_path), exist_ok=True)
-            with open(storage_path, 'wb') as f:
-                f.write(file_data['content'])
-        except Exception as exc:
-            response = json.dumps({'success': False, 'error': str(exc)}).encode('utf-8')
-            req['send'](response, 'application/json', True)
-            return
+    #     try:
+    #         os.makedirs(os.path.dirname(storage_path), exist_ok=True)
+    #         with open(storage_path, 'wb') as f:
+    #             f.write(file_data['content'])
+    #     except Exception as exc:
+    #         response = json.dumps({'success': False, 'error': str(exc)}).encode('utf-8')
+    #         req['send'](response, 'application/json', True)
+    #         return
 
-        editais = self._load_json('data/editais.json', [])
-        entry = {
-            'instituicao': instituicao,
-            'pais': pais,
-            'cursos_aceitos': cursos_aceitos,
-            'original_filename': safe_name,
-            'stored_filename': stored_name,
-            'path': storage_path,
-            'cadastrard_at': datetime.now().isoformat()
-        }
-        editais.append(entry)
-        self._save_json('data/editais.json', editais)
+    #     editais = self._load_json('data/editais.json', [])
+    #     entry = {
+    #         'instituicao': instituicao,
+    #         'pais': pais,
+    #         'cursos_aceitos': cursos_aceitos,
+    #         'original_filename': safe_name,
+    #         'stored_filename': stored_name,
+    #         'path': storage_path,
+    #         'cadastrard_at': datetime.now().isoformat()
+    #     }
+    #     editais.append(entry)
+    #     self._save_json('data/editais.json', editais)
 
-        response = json.dumps({'success': True, 'edital': entry}).encode('utf-8')
-        req['send'](response, 'application/json', True)
+    #     response = json.dumps({'success': True, 'edital': entry}).encode('utf-8')
+    #     req['send'](response, 'application/json', True)
 
     def saveUpload(self, req:dict):
-        payload = req.get('pl') or {}
-        instituicao = (payload.get('instituicao') or '').strip()
-        file_data = payload.get('file')
 
-        if not instituicao or not file_data or not file_data.get('content'):
-            response = json.dumps({'success': False, 'error': 'instituicao or file missing'}).encode('utf-8')
-            req['send'](response, 'application/json', True)
-            return
+        payload = req['pl']
 
-        safe_name = os.path.basename(file_data.get('filename', 'upload.bin'))
-        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-        stored_name = f'{timestamp}_{safe_name}'
-        storage_path = os.path.join('files', stored_name)
+        filename = payload['filename']
+        file = payload['file']
 
-        try:
-            os.makedirs(os.path.dirname(storage_path), exist_ok=True)
-            with open(storage_path, 'wb') as f:
-                f.write(file_data['content'])
-        except Exception as exc:
-            response = json.dumps({'success': False, 'error': str(exc)}).encode('utf-8')
-            req['send'](response, 'application/json', True)
-            return
+        with open(f'files/{filename}','wb') as f:
+            f.write(file)
 
-        metadata_file = os.path.join('data', 'editais.json')
-        try:
-            existing = []
-            if os.path.exists(metadata_file):
-                with open(metadata_file, 'r', encoding='utf-8') as f:
-                    existing = json.load(f)
-        except json.JSONDecodeError:
-            existing = []
+        res = json.dumps({'success': True, 'msg': 'Arquivo salvo com sucesso.'})
+        req['send'](res,'application/json',True)
 
-        entry = {
-            'instituicao': instituicao,
-            'original_filename': safe_name,
-            'stored_filename': stored_name,
-            'path': storage_path,
-            'cadastrard_at': datetime.now().isoformat()
-        }
-        existing.append(entry)
+        # payload = req.get('pl') or {}
+        # instituicao = (payload.get('instituicao') or '').strip()
+        # file_data = payload.get('file')
 
-        with open(metadata_file, 'w', encoding='utf-8') as f:
-            json.dump(existing, f, indent=2, ensure_ascii=False)
+        # if not instituicao or not file_data or not file_data.get('content'):
+        #     response = json.dumps({'success': False, 'error': 'instituicao or file missing'}).encode('utf-8')
+        #     req['send'](response, 'application/json', True)
+        #     return
 
-        response = json.dumps({'success': True, 'stored_filename': stored_name}).encode('utf-8')
-        req['send'](response, 'application/json', True)
+        # safe_name = os.path.basename(file_data.get('filename', 'upload.bin'))
+        # timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        # stored_name = f'{timestamp}_{safe_name}'
+        # storage_path = os.path.join('files', stored_name)
 
-    def getFiles(self,req:dict):
-        '''
-        Recebe a requisição e envia vários arquivos.
+        # try:
+        #     os.makedirs(os.path.dirname(storage_path), exist_ok=True)
+        #     with open(storage_path, 'wb') as f:
+        #         f.write(file_data['content'])
+        # except Exception as exc:
+        #     response = json.dumps({'success': False, 'error': str(exc)}).encode('utf-8')
+        #     req['send'](response, 'application/json', True)
+        #     return
 
-        req : Dicionário contendo o endpoint (str), o payload (str) e função de envio -> {'ep': endpoint, 'pl': payload, 'send': função}
-        '''
-        pass
+        # metadata_file = os.path.join('data', 'editais.json')
+        # try:
+        #     existing = []
+        #     if os.path.exists(metadata_file):
+        #         with open(metadata_file, 'r', encoding='utf-8') as f:
+        #             existing = json.load(f)
+        # except json.JSONDecodeError:
+        #     existing = []
+
+        # entry = {
+        #     'instituicao': instituicao,
+        #     'original_filename': safe_name,
+        #     'stored_filename': stored_name,
+        #     'path': storage_path,
+        #     'cadastrard_at': datetime.now().isoformat()
+        # }
+        # existing.append(entry)
+
+        # with open(metadata_file, 'w', encoding='utf-8') as f:
+        #     json.dump(existing, f, indent=2, ensure_ascii=False)
+
+        # response = json.dumps({'success': True, 'stored_filename': stored_name}).encode('utf-8')
+        # req['send'](response, 'application/json', True)
 
 

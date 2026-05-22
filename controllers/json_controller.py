@@ -15,6 +15,6 @@ class JsonController:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
     def to_json(self,data,type='str'):
-        if type == 'str': return json.dumps(data)
+        if type == 'str': return json.dumps(data).encode('utf-8')
         if type == 'file': return json.dump(data)
         

@@ -6,6 +6,12 @@ function AdminCadastro() {
   const [editais, setEditais] = useState([])
   const [status, setStatus] = useState('')
 
+  useEffect(() => {
+    if (localStorage.getItem('isAdmin') != 'true') {
+      navigate('/editais')
+    }
+  },[])
+
   return (
     <main id="center">
       <section className="hero">

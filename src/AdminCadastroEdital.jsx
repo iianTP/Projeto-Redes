@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import SelectCountryList from 'react-select-country-list'
 import './App.css'
+import { getData, sendData, sendFile } from './api'
 
 function AdminCadastroEdital() {
     
@@ -9,6 +10,7 @@ function AdminCadastroEdital() {
   const [cursos, setCursos] = useState([])
   const [paises, setPaises] = useState([])
 
+  const [titulo, setTitulo] = useState('');
   const [instituicao, setInstituicao] = useState('')
   const [pais, setPais] = useState('')
   const [cursoSelecionado, setCursoSelecionado] = useState([])
@@ -16,20 +18,25 @@ function AdminCadastroEdital() {
   const [status, setStatus] = useState('')
   const navigate = useNavigate()
 
-  useEffect(() => {
-    fetch('http://127.0.0.1:8080/admin/instituicoes')
-      .then((res) => res.json())
-      .then(setInstituicoes)
-      .catch(() => setStatus('Não foi possível carregar as instituições.'))
+  useEffect(async () => {
 
-    fetch('http://127.0.0.1:8080/admin/cursos')
-      .then((res) => res.json())
-      .then(setCursos)
-      .catch(() => setStatus('Não foi possível carregar os cursos.'))
+    //fetch('http://127.0.0.1:8080/admin/instituicoes')
+    //.then((res) => res.json())
+    await getData('instituicoes.json')
+    .then(setInstituicoes)
+    .catch(() => setStatus('Não foi possível carregar as instituições.'))
+
+    //fetch('http://127.0.0.1:8080/admin/cursos')
+    //.then((res) => res.json())
+    await getData('cursos.json')
+    .then(setCursos)
+    .catch(() => setStatus('Não foi possível carregar os cursos.'))
 
     const options = SelectCountryList().getData()
     const paisesNomes = options.map((item) => item.label)
     setPaises(paisesNomes)
+
+
   }, [])
 
   const handleCursoChange = (event) => {
@@ -49,29 +56,53 @@ function AdminCadastroEdital() {
       return
     }
 
-    const formData = new FormData()
-    formData.append('instituicao', instituicao)
-    formData.append('pais', pais)
-    formData.append('cursosAceitos', JSON.stringify(cursoSelecionado))
-    formData.append('pdf', pdf)
-
-    try {
-      const response = await fetch('http://127.0.0.1:8080/admin/cadastrar-edital', {
-        method: 'POST',
-        body: formData,
-      })
-      const result = await response.json()
-
-      if (result.success) {
-        setStatus('Edital cadastrado com sucesso.')
-        navigate('/admin')
-      } else {
-        setStatus(`Falha: ${result.error || 'erro desconhecido'}`)
-      }
-    } catch (error) {
-      setStatus('Erro de conexão com o servidor.')
-      console.error(error)
+    var edital = {
+      id: 'default-id',
+      titulo: titulo,
+      instituicao: instituicao,
+      curso: "default-curso",
+      pais: pais,
+      statusText: "Em andamento",
+      statusType: "andamento",
+      pdfPath: pdf.name,
+      descricao: "default-descrição",
+      dataInicio: "dd/mm/yyyy",
+      dataFim: "dd/mm/yyyy"
     }
+
+    await sendData('admin/cadastrar-edital', edital)
+    .then()
+    .catch(err => setStatus(`Falha: {}`))
+
+    await sendFile(pdf)
+    .then()
+    .catch(err => setStatus(`Falha: {}`))
+
+    // const formData = new FormData()
+    // formData.append('instituicao', instituicao)
+    // formData.append('pais', pais)
+    // formData.append('cursosAceitos', JSON.stringify(cursoSelecionado))
+    // formData.append('pdf', pdf)
+
+    // try {
+    //   const response = await fetch('http://127.0.0.1:8080/admin/cadastrar-edital', {
+    //     method: 'POST',
+    //     body: formData,
+    //   })
+    //   const result = await response.json()
+
+    //   if (result.success) {
+    //     setStatus('Edital cadastrado com sucesso.')
+    //     navigate('/admin')
+    //   } else {
+    //     setStatus(`Falha: ${result.error || 'erro desconhecido'}`)
+    //   }
+    // } catch (error) {
+    //   setStatus('Erro de conexão com o servidor.')
+    //   console.error(error)
+    // }
+
+
   }
 
   return (
@@ -82,10 +113,19 @@ function AdminCadastroEdital() {
 
       <form className="upload-form" onSubmit={handleSubmit}>
         <label>
+          Título do edital
+          <input
+            type="text"
+            value={titulo}
+            onChange={(e) => setTitulo(e.target.value)}
+            placeholder="Título do edital"
+          />
+        </label>
+        <label>
           Instituição
           <select value={instituicao} onChange={(e) => setInstituicao(e.target.value)}>
             <option value="">Selecione</option>
-            {instituicoes.map((item) => (
+            {Object.values(instituicoes).map((item) => (
               <option key={item.nome} value={item.nome}>
                 {item.nome}
               </option>

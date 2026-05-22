@@ -33,9 +33,9 @@ class WebServer:
 				('shutdown', lambda _: self.__setattr__('exit',True)), # fecha o servidor
 				('login', self.uc.login),
 				('upload', self.fc.saveUpload),
-				('admin/cadastrar-edital', self.cc.cadastrarEdital),
-				('admin/cadastrar-aluno', self.cc.cadastrarAluno),
-				('admin/cadastrar-instituicao', self.cc.cadastrarInstituicao),
+				('admin/cadastrar-edital', lambda req: self.cc.cadastrar(req,'edital')),
+				('admin/cadastrar-aluno', lambda req: self.cc.cadastrar(req,'aluno')),
+				('admin/cadastrar-instituicao', lambda req: self.cc.cadastrar(req,'instituicao')),
 			],
             'PUT':[],
             'DELETE':[]
@@ -82,6 +82,18 @@ class WebServer:
 
 		return result
 
+	def getHeaderDict(self,header):
+		h_dict: dict = {}
+		for line in header.split(b'\r\n')[1:]:
+				
+			split_line = line.split(b':',1)
+			key = split_line[0].strip().decode('utf-8', errors='ignore')
+			value = split_line[1].strip().decode('utf-8', errors='ignore')
+
+			h_dict[key] = value
+
+		return h_dict
+
 	def start(self):
 		'''
 		Inicializa o Web Server
@@ -112,17 +124,21 @@ class WebServer:
 			header, rest = request.split(b'\r\n\r\n', 1)
 			print(header.decode(errors='ignore'))
 
-			content_length = 0
-			content_type = ''
-			for line in header.split(b'\r\n')[1:]:
-				lower_line = line.lower()
-				if lower_line.startswith(b'content-length:'):
-					try:
-						content_length = int(line.split(b':', 1)[1].strip())
-					except ValueError:
-						content_length = 0
-				elif lower_line.startswith(b'content-type:'):
-					content_type = line.split(b':', 1)[1].strip().decode('utf-8', errors='ignore')
+			header_dict = self.getHeaderDict(header)
+			print(header_dict)
+
+			content_length: str = int(header_dict['Content-Length']) if 'Content-Length' in header_dict else 0
+			content_type: str = header_dict['Content-Type'] if 'Content-Type' in header_dict else ''
+
+			# for line in header.split(b'\r\n')[1:]:
+			# 	lower_line = line.lower()
+			# 	if lower_line.startswith(b'content-length:'):
+			# 		try:
+			# 			content_length = int(line.split(b':', 1)[1].strip())
+			# 		except ValueError:
+			# 			content_length = 0
+			# 	elif lower_line.startswith(b'content-type:'):
+			# 		content_type = line.split(b':', 1)[1].strip().decode('utf-8', errors='ignore')
 
 			body = rest
 			while len(body) < content_length:
@@ -133,8 +149,10 @@ class WebServer:
 
 			payload = None
 			if len(body) > 0:
+
 				if content_type.startswith('application/json'):
 					payload = json.loads(body.decode('utf-8'))
+
 				elif content_type.startswith('multipart/form-data'):
 					boundary = ''
 					for part in content_type.split(';'):
@@ -145,12 +163,19 @@ class WebServer:
 						payload = self._parse_multipart(body, boundary)
 					else:
 						payload = None
+
+				elif content_type.startswith('application/pdf'):
+					payload = {
+						'filename': header_dict['X-File-Name'],
+						'file': body
+					}
+
 				else:
 					try:
 						payload = json.loads(body.decode('utf-8'))
 					except json.JSONDecodeError:
 						payload = body.decode('utf-8', errors='ignore')
-			print('\n', payload)
+
 
 			P = header.split(b' ')[0:3]
 

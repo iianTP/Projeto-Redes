@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './App.css'
 import { sendData } from './api'
@@ -8,6 +8,12 @@ function AdminCadastroInstituicao() {
   const [status, setStatus] = useState('')
   const navigate = useNavigate()
 
+  useEffect(() => {
+    if (localStorage.getItem('isAdmin') != 'true') {
+      navigate('/editais')
+    }
+  },[]);
+
   const handleSubmit = async (event) => {
     event.preventDefault()
 
@@ -16,7 +22,7 @@ function AdminCadastroInstituicao() {
       return
     }
 
-    sendData('admin/cadastrar-instituicao',{name:nome})
+    sendData('admin/cadastrar-instituicao',{nome:nome})
     .then(res => {
       setStatus(res.msg);
     })
