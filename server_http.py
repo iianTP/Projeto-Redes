@@ -23,10 +23,10 @@ class WebServer:
             'GET':[
                 ('assets', self.fc.getFile), # para carregamento de assets da build
                 ('files',  self.fc.getFile),  # para envio INDIVIDUAL de arquivos da pasta 'files'
-                ('admin/instituicoes', self.fc.listInstituicoes),
-                ('admin/editais', self.fc.listEditais),
-                #('admin/cursos', self.fc.listCursos),
-                #('admin/unidades-ensino', self.fc.listUnidadesEnsino),
+                # ('admin/instituicoes', self.fc.listInstituicoes),
+                # ('admin/editais', self.fc.listEditais),
+                # ('admin/cursos', self.fc.listCursos),
+                # ('admin/unidades-ensino', self.fc.listUnidadesEnsino),
 				('data',self.fc.getFile)
             ],
             'POST':[

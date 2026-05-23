@@ -1,21 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import CardEdital from '../components/CardEdital';
-import * as api from'./api.js'
+import SelectCountryList from 'react-select-country-list';
+import { getData } from'./api.js';
 
 function Editais() {
   const [editais, setEditais] = useState([]);
+  const [cursos, setCursos] = useState([]);
+  const [paises, setPaises] = useState([]);
+  const [instituicoes, setInstituicoes] = useState([]);
   const [busca, setBusca] = useState('');
+
   const [filtroInstiticao, setFiltroInstiticao] = useState('Todos');
+  const [filtroCurso, setFiltroCurso] = useState('Todos');
+  const [filtroPais, setFiltroPais] = useState('Todos');
+  const [filtroStatus, setFiltroStatus] = useState('Todos');
+
 
   // Busca os dados dinâmicos do seu servidor Python ao carregar a página
-  useEffect(() => {
-    api.getEditais().then((res) => setEditais(res));
+  useEffect(async () => {
+    await getData('editais.json').then((res) => setEditais(Object.values(res)));
+    await getData('cursos.json').then((res) => setCursos(res));
+    await getData('instituicoes.json').then((res) => setInstituicoes(Object.values(res)));
+
+    const options = SelectCountryList().getData()
+    const paisesNomes = options.map((item) => item.label)
+    setPaises(paisesNomes)
   }, []);
 
   // Lógica de filtragem no Front-end baseada no input de busca
   const editaisFiltrados = editais.filter(edital => 
     edital.titulo.toLowerCase().includes(busca.toLowerCase()) &&
-    (filtroInstiticao === 'Todos' || edital.instituicao === filtroInstiticao)
+    (filtroInstiticao === 'Todos' || edital.instituicao === filtroInstiticao) &&
+    (filtroCurso      === 'Todos' || edital.curso       === filtroCurso) &&
+    (filtroPais       === 'Todos' || edital.pais        === filtroPais) &&
+    (filtroStatus     === 'Todos' || edital.statusText  === filtroStatus)
   );
 
   return (
@@ -65,11 +83,28 @@ function Editais() {
           <div style={styles.selectGrid}>
             <select style={styles.select} onChange={(e) => setFiltroInstiticao(e.target.value)}>
               <option value="Todos">Todos — Instituição</option>
-              <option value="Sorbonne Université">Sorbonne Université</option>
+              {instituicoes.map((inst) => (
+                <option value={inst.nome}>{inst.nome}</option>
+              ))}
             </select>
-            <select style={styles.select}><option>Todos — Curso</option></select>
-            <select style={styles.select}><option>Todos — País</option></select>
-            <select style={styles.select}><option>Todos — Status</option></select>
+            <select style={styles.select} onChange={(e) => setFiltroCurso(e.target.value)}>
+              <option value="Todos">Todos — Curso</option>
+              {cursos.map((curso) => (
+                <option value={curso}>{curso}</option>
+              ))}
+            </select>
+            <select style={styles.select} onChange={(e) => setFiltroPais(e.target.value)}>
+              <option value="Todos">Todos — País</option>
+              {paises.map((pais) => (
+                <option value={pais}>{pais}</option>
+              ))}
+            </select>
+            <select style={styles.select} onChange={(e) => setFiltroStatus(e.target.value)}>
+              <option value="Todos">Todos — Status</option>
+              {['Em andamento','Em breve', 'Encerrado'].map((status) => (
+                <option value={status}>{status}</option>
+              ))}
+            </select>
           </div>
         </section>
 
@@ -80,8 +115,8 @@ function Editais() {
 
         {/* Lista Variável de Editais */}
         <div style={styles.listContainer}>
-          {editaisFiltrados.map((edital) => (
-            <CardEdital key={edital.id} edital={edital} />
+          {editaisFiltrados.map((edital,index) => (
+            <CardEdital key={index/*edital.id*/} edital={edital} />
           ))}
         </div>
       </main>

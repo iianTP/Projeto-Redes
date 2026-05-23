@@ -37,7 +37,7 @@ class FilesController:
 
         print(path)
 
-        content, fileFound = self.jc.load_json(path)
+        content, fileFound = self._openFile(path)
 
         req['send'](content, mimetype, fileFound)
 
@@ -61,13 +61,13 @@ class FilesController:
         res = json.dumps({'success': True, 'msg': 'Arquivo salvo com sucesso.'})
         req['send'](res,'application/json',True)
 
-    # def _openFile(self,path):
-    #     try:
-    #         with open(path, 'rb') as f:
-    #             content = f.read()
-    #         return content, True
-    #     except FileNotFoundError:
-    #         return None, False
+    def _openFile(self,path):
+        try:
+            with open(path, 'rb') as f:
+                content = f.read()
+            return content, True
+        except FileNotFoundError:
+            return None, False
 
     # def _load_json(self, path, default):
     #     try:
