@@ -6,6 +6,11 @@ class UserController:
         pass
 
     def login(self,req):
+        '''
+        Avalia login do cliente no sistema.
+
+        req : Dicionário contendo o endpoint (str), o payload (str) e função de envio -> {'ep': endpoint, 'pl': payload, 'send': função}
+        '''
 
         with open('data/usuarios.json') as f:
             users_dict = json.load(f)

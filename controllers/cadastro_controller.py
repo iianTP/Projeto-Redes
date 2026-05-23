@@ -35,7 +35,23 @@ class CadastroController:
             }
         }
 
+    def sendError(self,req,msg):
+        '''
+        Envia mensagem de erro para o cliente.
+
+        req : Dicionário contendo o endpoint (str), o payload (str) e função de envio -> {'ep': endpoint, 'pl': payload, 'send': função}
+        msg: Mensagem de erro (str)
+        '''
+        response = self.jc.to_json({'success':False, 'error': msg})
+        req['send'](response,'application/json',True)
+
     def cadastrar(self,req,type):
+        '''
+        Cadastra alunos, editais e instituições.
+
+        req : Dicionário contendo o endpoint (str), o payload (str) e função de envio -> {'ep': endpoint, 'pl': payload, 'send': função}
+        type: Tipo do cadastro (str) -> 'aluno', 'edital' ou 'instituicao'
+        '''
 
         payload = req['pl']
         identifier = self.info[type]['id']
@@ -43,17 +59,19 @@ class CadastroController:
         scc_msg = self.info[type]['msg']
         err_msgs = self.info[type]['error']
 
-        data: dict = self.jc.load_json(json_path)
+        data, fileFound = self.jc.load_json(json_path)
         response = self.jc.to_json({'success': True, 'msg': scc_msg})
 
+        if not fileFound:
+            self.sendError(req,'Falha ao encontrar dados')
+            return
+
         if not all([data[att] for att in data.keys()]):
-            response = self.jc.to_json({'success': False, 'error': err_msgs[0]})
-            req['send'](response, 'application/json', True)
+            self.sendError(req,err_msgs[0])
             return
         
         if payload[identifier] in data:
-            response = self.jc.to_json({'success':False, 'error': err_msgs[1]})
-            req['send'](response,'application/json',True)
+            self.sendError(req,err_msgs[1])
             return
         
         data[payload[identifier]] = payload

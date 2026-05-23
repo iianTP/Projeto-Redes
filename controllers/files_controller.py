@@ -1,12 +1,14 @@
 import json
-import os
-from datetime import datetime
-from socket import socket
+# import os
+# from datetime import datetime
+# from socket import socket
 from models import *
-import pycountry
+# import pycountry
+from controllers.json_controller import JsonController
 
 class FilesController:
     def __init__(self):
+        self.jc = JsonController()
         self.content_types = {
             'html': 'text/html',
             'js':   'application/javascript',
@@ -17,14 +19,6 @@ class FilesController:
             'svg':  'image/svg+xml',
             'pdf':  'application/pdf'
         }
-    
-    def _openFile(self,path):
-        try:
-            with open(path, 'rb') as f:
-                content = f.read()
-            return content, True
-        except FileNotFoundError:
-            return None, False
 
     def getFile(self,req:dict):
         '''
@@ -43,23 +37,18 @@ class FilesController:
 
         print(path)
 
-        content, fileFound = self._openFile(path)
+        content, fileFound = self.jc.load_json(path)
 
         req['send'](content, mimetype, fileFound)
 
-    def _load_json(self, path, default):
-        try:
-            with open(path, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            return default
 
-    def _save_json(self, path, data):
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(path, 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
     
     def saveUpload(self, req:dict):
+        '''
+        Salva arquivo no servidor.
+
+        req : Dicionário contendo o endpoint (str), o payload (str) e função de envio -> {'ep': endpoint, 'pl': payload, 'send': função}
+        '''
 
         payload = req['pl']
 
@@ -72,7 +61,25 @@ class FilesController:
         res = json.dumps({'success': True, 'msg': 'Arquivo salvo com sucesso.'})
         req['send'](res,'application/json',True)
 
-    
+    # def _openFile(self,path):
+    #     try:
+    #         with open(path, 'rb') as f:
+    #             content = f.read()
+    #         return content, True
+    #     except FileNotFoundError:
+    #         return None, False
+
+    # def _load_json(self, path, default):
+    #     try:
+    #         with open(path, 'r', encoding='utf-8') as f:
+    #             return json.load(f)
+    #     except (FileNotFoundError, json.JSONDecodeError):
+    #         return default
+
+    # def _save_json(self, path, data):
+    #     os.makedirs(os.path.dirname(path), exist_ok=True)
+    #     with open(path, 'w', encoding='utf-8') as f:
+    #         json.dump(data, f, indent=2, ensure_ascii=False)
     # def listInstituicoes(self, req:dict):
     #     instituicoes = self._load_json('data/instituicoes.json', [])
     #     response = json.dumps(instituicoes).encode('utf-8')
