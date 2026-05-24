@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import './App.css'
 import { getData, sendData } from './api'
 
@@ -14,13 +13,7 @@ function AdminCadastroAluno() {
   const [curso, setCurso] = useState('')
   const [status, setStatus] = useState('')
 
-  const navigate = useNavigate()
-
   useEffect(async () => {
-
-    if (localStorage.getItem('isAdmin') != 'true') {
-      navigate('/editais')
-    }
 
     await getData('unidades-ensino.json')
     .then(setUnidadesEnsino)

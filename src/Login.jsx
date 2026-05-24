@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { login } from './api';
-import { Link,Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Login({ onLoginSuccess }) {
   const [cpf, setCpf] = useState('');
@@ -14,6 +14,7 @@ function Login({ onLoginSuccess }) {
     if (!isNaN(cpf) && !isNaN(parseFloat(cpf))) {
       login({cpf:cpf,password:senha})
       .then((res) => {
+        localStorage.setItem('isLogged',res.valid)
         localStorage.setItem('isAdmin',res.isAdmin)
         return res.valid
       })

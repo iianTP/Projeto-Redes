@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CardEdital from '../components/CardEdital';
 import SelectCountryList from 'react-select-country-list';
 import { getData } from'./api.js';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 function Editais() {
   const [editais, setEditais] = useState([]);
@@ -14,10 +15,9 @@ function Editais() {
   const [filtroCurso, setFiltroCurso] = useState('Todos');
   const [filtroPais, setFiltroPais] = useState('Todos');
   const [filtroStatus, setFiltroStatus] = useState('Todos');
-
-
-  // Busca os dados dinâmicos do seu servidor Python ao carregar a página
+  
   useEffect(async () => {
+    
     await getData('editais.json').then((res) => setEditais(Object.values(res)));
     await getData('cursos.json').then((res) => setCursos(res));
     await getData('instituicoes.json').then((res) => setInstituicoes(Object.values(res)));
@@ -27,7 +27,6 @@ function Editais() {
     setPaises(paisesNomes)
   }, []);
 
-  // Lógica de filtragem no Front-end baseada no input de busca
   const editaisFiltrados = editais.filter(edital => 
     edital.titulo.toLowerCase().includes(busca.toLowerCase()) &&
     (filtroInstiticao === 'Todos' || edital.instituicao === filtroInstiticao) &&

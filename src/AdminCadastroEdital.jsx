@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import SelectCountryList from 'react-select-country-list'
 import './App.css'
 import { getData, sendData, sendFile } from './api'
@@ -16,7 +16,6 @@ function AdminCadastroEdital() {
   const [cursoSelecionado, setCursoSelecionado] = useState([])
   const [pdf, setPdf] = useState(null)
   const [status, setStatus] = useState('')
-  const navigate = useNavigate()
 
   useEffect(async () => {
 

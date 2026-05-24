@@ -1,16 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './App.css'
 
 function AdminCadastro() {
   const [editais, setEditais] = useState([])
   const [status, setStatus] = useState('')
-
-  useEffect(() => {
-    if (localStorage.getItem('isAdmin') != 'true') {
-      navigate('/editais')
-    }
-  },[])
 
   return (
     <main id="center">

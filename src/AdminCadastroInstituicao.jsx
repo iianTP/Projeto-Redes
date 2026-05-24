@@ -1,18 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import './App.css'
 import { sendData } from './api'
 
 function AdminCadastroInstituicao() {
   const [nome, setNome] = useState('')
   const [status, setStatus] = useState('')
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (localStorage.getItem('isAdmin') != 'true') {
-      navigate('/editais')
-    }
-  },[]);
 
   const handleSubmit = async (event) => {
     event.preventDefault()
