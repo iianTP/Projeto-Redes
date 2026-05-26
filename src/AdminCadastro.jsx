@@ -1,9 +1,17 @@
-import { Link } from 'react-router-dom'
-import './App.css'
+import { Link, useNavigate } from 'react-router-dom';
+import './App.css';
 
 function AdminCadastro() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
+
   return (
     <main id="center" className="container">
+
       <section>
         <h1 className="sectionTitle">Área de Cadastramento</h1>
 
@@ -24,11 +32,30 @@ function AdminCadastro() {
 
       <div className="ticks"></div>
 
-      <Link to="/editais" className="botao">
-        Voltar para página de editais
-      </Link>
+      <div className="headerActions">
+        <button
+          className="backBtn"
+          onClick={() => navigate('/editais')}
+        >
+          ← Voltar aos Editais
+        </button>
+
+        <button className="logoutBtn" onClick={handleLogout}>
+          <svg
+            className="logoutIcon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+          </svg>
+          Sair
+        </button>
+      </div>
+
     </main>
-  )
+  );
 }
 
-export default AdminCadastro
+export default AdminCadastro;
