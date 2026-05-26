@@ -23,6 +23,7 @@ class WebServer:
             'GET':[
                 ('assets', self.fc.getFile), # para carregamento de assets da build
                 ('files',  self.fc.getFile),  # para envio INDIVIDUAL de arquivos da pasta 'files'
+				('candidatura/listar', self.fc.listarCandidaturas),
                 ('admin/instituicoes', self.fc.listInstituicoes),
                 ('admin/editais', self.fc.listEditais),
                 ('admin/cursos', self.fc.listCursos),
@@ -33,8 +34,7 @@ class WebServer:
 				('shutdown', lambda _: self.__setattr__('exit',True)), # fecha o servidor
 				('login', self.uc.login),
 				('upload', self.fc.saveUpload),
-			('candidatura/criar', self.fc.criarCandidatura),
-			('candidatura/listar', self.fc.listarCandidaturas),
+				('candidatura/criar', self.fc.criarCandidatura),
 				('admin/cadastrar-edital', lambda req: self.cc.cadastrar(req,'edital')),
 				('admin/cadastrar-aluno', lambda req: self.cc.cadastrar(req,'aluno')),
 				('admin/cadastrar-instituicao', lambda req: self.cc.cadastrar(req,'instituicao')),
