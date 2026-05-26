@@ -24,28 +24,6 @@ function AdminCadastroInstituicao() {
       setStatus(`Falha: ${err.message}`)
     });
 
-    // const formData = new FormData()
-    // formData.append('Nome', nome)
-
-    // try {
-    //   const response = await fetch('http://127.0.0.1:8080/admin/cadastrar-instituicao', {
-    //     method: 'POST',
-    //     body: formData,
-    //   })
-    //   const result = await response.json()
-
-    //   if (result.success) {
-    //     setStatus('Instituição cadastrada com sucesso.')
-    //     navigate('/admin')
-    //   } else {
-    //     setStatus(`Falha: ${result.error || 'erro desconhecido'}`)
-    //   }
-    // } catch (error) {
-    //   setStatus('Erro de conexão com o servidor.')
-    //   console.error(error)
-    // }
-
-
   }
 
   return (

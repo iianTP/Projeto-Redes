@@ -1,4 +1,4 @@
-import json, datetime
+import datetime, bcrypt
 from controllers.json_controller import JsonController
 
 class CadastroController:
@@ -60,7 +60,7 @@ class CadastroController:
         err_msgs = self.info[type]['error']
 
         data, fileFound = self.jc.load_json(json_path)
-        response = self.jc.to_json({'success': True, 'msg': scc_msg})
+        response = self.jc.to_json({'success': True, 'msg': scc_msg, 'pw': '12345'})
 
         if not fileFound:
             self.sendError(req,'Falha ao encontrar dados')
@@ -77,6 +77,22 @@ class CadastroController:
         data[payload[identifier]] = payload
         data[payload[identifier]]['timestamp'] = datetime.datetime.now().isoformat()
 
+
         self.jc.save_json(json_path,data)
+
+        if type == 'aluno': self.createUser(payload['cpf'])
         
         req['send'](response,'application/json',True)
+
+    def createUser(self,cpf):
+        users,_ = self.jc.load_json('data/usuarios.json')
+        
+        users[cpf] = {
+            'pw':bcrypt.hashpw('12345'.encode('utf-8'),bcrypt.gensalt()).decode(),
+            'isAdmin': False
+        }
+
+        self.jc.save_json('data/usuarios.json',users)
+    
+
+

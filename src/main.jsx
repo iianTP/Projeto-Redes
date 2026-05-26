@@ -1,7 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Route, Routes, BrowserRouter, Navigate } from 'react-router-dom'
-import App from './App.jsx'
 
 import AdminCadastro from './AdminCadastro.jsx'
 import AdminCadastroEdital from './AdminCadastroEdital.jsx'

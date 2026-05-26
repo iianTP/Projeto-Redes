@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { sendData } from '../src/api';
 
 function ModalCandidatura({ edital, isOpen, onClose, onSuccess }) {
   const [arquivos, setArquivos] = useState([]);
@@ -25,38 +26,26 @@ function ModalCandidatura({ edital, isOpen, onClose, onSuccess }) {
       return;
     }
 
-    try {
-      const formData = new FormData();
-      formData.append('cpf_aluno', user.cpf);
-      formData.append('id_edital', edital.id);
-      
-      
-      const nomes_arquivos = arquivos.map(f => f.name);
-      formData.append('documentos', JSON.stringify(nomes_arquivos));
+    const nomes_arquivos = arquivos.map(f => f.name);
 
-      const response = await fetch('http://127.0.0.1:8080/candidatura/criar', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setSucesso(true);
-        setArquivos([]);
-        setTimeout(() => {
-          onClose();
-          onSuccess && onSuccess();
-        }, 1500);
-      } else {
-        setErro(data.error || 'Erro ao enviar candidatura');
-      }
-    } catch (error) {
-      console.error('Erro:', error);
-      setErro('Erro de conexão com o servidor');
+    var info = {
+      cpf_aluno: user.cpf,
+      id_edital: edital.id,
+      documentos: JSON.stringify(nomes_arquivos)
     }
 
-    setCarregando(false);
+    sendData('candidatura/criar',info)
+    .then((res) => {
+      setSucesso(true);
+      setArquivos([]);
+      setTimeout(() => {
+        onClose();
+        onSuccess && onSuccess();
+      }, 1500);
+    })
+    .catch(() => setErro('Erro ao enviar candidatura'))
+    .finally(() => setCarregando(false))
+
   };
 
   if (!isOpen) return null;

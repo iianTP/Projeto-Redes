@@ -28,5 +28,15 @@
     "documentos": [
       "modelo-er-ari.pdf"
     ]
+  },
+  {
+    "id": 4,
+    "cpf_aluno": "33333333332",
+    "id_edital": 1,
+    "data_candidatura": "2026-05-26T19:15:52.168153",
+    "status": "pendente",
+    "documentos": [
+      "atividade_aula_3.docx"
+    ]
   }
 ]

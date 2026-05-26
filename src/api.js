@@ -42,9 +42,13 @@ export const getData = (data) => {
 
 }
 
+
+
+// POST
 export const getCandidaturas = (cpf) => {
     return new Promise((resolve,reject) => {
-        xhr.open('GET', `${url}/candidatura/listar`, true);
+        xhr.open('POST', `${url}/candidatura/listar`, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
         xhr.responseType = 'json';
 
         xhr.onload = function() {
@@ -60,11 +64,11 @@ export const getCandidaturas = (cpf) => {
             console.error('Erro na conexão com o servidor');
         };
 
-        xhr.send(cpf);
+        xhr.send(JSON.stringify({cpf_aluno:cpf}));
     })
 }
 
-// POST
+
 export const shutdown = () => {
     xhr.open('POST', `${url}/shutdown`, true);
     xhr.send();
@@ -77,7 +81,6 @@ export const sendData = (path,data) => {
 
         xhr.onload = function() {
             if (!this.response.success) {
-                console.log(this.response)
                 reject(new Error(this.response.error))
             } else {
                 resolve(this.response);

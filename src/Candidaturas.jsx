@@ -18,7 +18,7 @@ function Candidaturas() {
     carregarCandidaturas();
   }, [navigate]);
 
-  const carregarCandidaturas = async () => {
+  const carregarCandidaturas = () => {
 
     getCandidaturas(user.cpf)
     .then((res) => {
@@ -26,31 +26,6 @@ function Candidaturas() {
     })
     .catch(err => setErro(err))
     .finally(() => setCarregando(false))
-
-    // try {
-    //   const response = await fetch('http://127.0.0.1:8080/candidatura/listar', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ cpf_aluno: user.cpf }),
-    //   });
-
-    //   const data = await response.json();
-
-    //   if (data.success) {
-    //     setCandidaturas(data.candidaturas || []);
-    //   } else {
-    //     setErro(data.error || 'Erro ao carregar candidaturas');
-    //   }
-    // } catch (error) {
-    //   console.error('Erro:', error);
-    //   setErro('Erro de conexão com o servidor');
-    // } finally {
-    //   setCarregando(false);
-    // }
-
-
 
   };
 

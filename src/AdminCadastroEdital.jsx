@@ -20,14 +20,10 @@ function AdminCadastroEdital() {
 
   useEffect(async () => {
 
-    //fetch('http://127.0.0.1:8080/admin/instituicoes')
-    //.then((res) => res.json())
     await getData('instituicoes.json')
     .then(setInstituicoes)
     .catch(() => setStatus('Não foi possível carregar as instituições.'))
 
-    //fetch('http://127.0.0.1:8080/admin/cursos')
-    //.then((res) => res.json())
     await getData('cursos.json')
     .then(setCursos)
     .catch(() => setStatus('Não foi possível carregar os cursos.'))

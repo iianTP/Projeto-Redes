@@ -1,11 +1,14 @@
 {
-    "12345678900": {
-        "pw": "$2b$12$4DVnG4K/Izgr3IdKOtXpJ.P.1xMcQx6hMCw2oL.4pVC2.btxau3Xi",
-        "isAdmin": true
-    },
-    "12345": {
-        "pw": "$2b$12$q7ek7wSSmgBskXcViZ01qOopzq.PyQyY8vmZ7ReT.4T82uUIv7qtS",
-        "isAdmin": false
-    }
-    
+  "12345678900": {
+    "pw": "$2b$12$4DVnG4K/Izgr3IdKOtXpJ.P.1xMcQx6hMCw2oL.4pVC2.btxau3Xi",
+    "isAdmin": true
+  },
+  "12345": {
+    "pw": "$2b$12$q7ek7wSSmgBskXcViZ01qOopzq.PyQyY8vmZ7ReT.4T82uUIv7qtS",
+    "isAdmin": false
+  },
+  "33333333332": {
+    "pw": "$2b$12$r67ecRpuUNiq01X6P40OT.wAsYPnfNn60bAu9ESK0JgChL6PtDZj.",
+    "isAdmin": false
+  }
 }
