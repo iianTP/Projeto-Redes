@@ -56,7 +56,7 @@ class FilesController:
         with open(f'files/{filename}','wb') as f:
             f.write(file)
 
-        res = json.dumps({'success': True, 'msg': 'Arquivo salvo com sucesso.'})
+        res = self.jc.to_json({'success': True, 'msg': 'Arquivo salvo com sucesso.'})
         req['send'](res,'application/json',True)
 
     def _openFile(self,path):
