@@ -47,7 +47,7 @@ function Login({ onLoginSuccess }) {
   return (
     <main
       id="center"
-      className="container"
+      className="loginContainer"
     >
       <section className="login-card">
         <div className="login-header">
