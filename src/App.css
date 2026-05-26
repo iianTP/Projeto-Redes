@@ -341,3 +341,157 @@
   border-radius: 4px;
   font-size: 12px;
 }
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContainer {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: auto;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modalTitulo {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.modalCloseBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.modalForm {
+  padding: 24px;
+}
+
+.modalInfoSection {
+  background-color: #f8fafc;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.modalInfoText {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #334155;
+}
+
+.modalFileSection {
+  margin-bottom: 20px;
+}
+
+.modalFileLabel {
+  display: block;
+  padding: 24px;
+  background-color: #f1f5f9;
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.modalFileInput {
+  display: none;
+}
+
+.modalFileList {
+  margin-top: 12px;
+}
+
+.modalFilesCount {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 8px 0;
+}
+
+.modalUl {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.modalListItem {
+  font-size: 13px;
+  padding: 6px 0;
+  color: #334155;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modalErrorText {
+  color: #ef4444;
+  font-size: 13px;
+  margin: 12px 0;
+  padding: 8px 12px;
+  background-color: #fee2e2;
+  border-radius: 4px;
+}
+
+.modalSuccessText {
+  color: #16a34a;
+  font-size: 13px;
+  margin: 12px 0;
+  padding: 8px 12px;
+  background-color: #dcfce7;
+  border-radius: 4px;
+}
+
+.modalButtonGroup {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+.modalCancelBtn {
+  padding: 10px 20px;
+  background-color: #e2e8f0;
+  color: #334155;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.modalSubmitBtn {
+  padding: 10px 20px;
+  background-color: #0f172a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
