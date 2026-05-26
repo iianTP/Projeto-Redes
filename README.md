@@ -5,7 +5,7 @@
 ### 1. Acessar diretório
 
 ```
-cd projeto-redes
+cd Projeto-Redes
 ```
 ### 2. Buildar projeto
 ```

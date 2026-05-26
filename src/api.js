@@ -1,5 +1,5 @@
 
-const url = 'http://127.0.0.1:8080';
+const url = `http://${window.location.href.split('/')[2]}`;
 const xhr = new XMLHttpRequest();
 
 // GET
@@ -24,6 +24,46 @@ export const downloadFile = (path) => {
 
 }
 
+export const getData = (data) => {
+    return new Promise((resolve,reject) => {
+        xhr.open('GET', `${url}/data/${data}`, true);
+        xhr.responseType = 'json';
+
+        xhr.onload = function() {
+            resolve(this.response);
+        };
+
+        xhr.onerror = function() {
+            console.error('Erro na conexão com o servidor');
+        };
+
+        xhr.send();
+    })
+
+}
+
+export const getCandidaturas = (cpf) => {
+    return new Promise((resolve,reject) => {
+        xhr.open('GET', `${url}/candidatura/listar`, true);
+        xhr.responseType = 'json';
+
+        xhr.onload = function() {
+            console.log(this.response)
+            if (this.response.success){
+                resolve(this.response);
+            } else {
+                reject(new Error(this.response.error));
+            }
+        };
+
+        xhr.onerror = function() {
+            console.error('Erro na conexão com o servidor');
+        };
+
+        xhr.send(cpf);
+    })
+}
+
 // POST
 export const shutdown = () => {
     xhr.open('POST', `${url}/shutdown`, true);
@@ -31,16 +71,50 @@ export const shutdown = () => {
 }
 
 export const sendData = (path,data) => {
-    xhr.open('POST', `${url}/${path}`, true);
-    xhr.responseType = 'json';
+    return new Promise((resolve,reject) => {
+        xhr.open('POST', `${url}/${path}`, true);
+        xhr.responseType = 'json';
 
-    xhr.onload = function() {
-        console.log(this.response.valid);
-    }
+        xhr.onload = function() {
+            if (!this.response.success) {
+                console.log(this.response)
+                reject(new Error(this.response.error))
+            } else {
+                resolve(this.response);
+            }
+        }
 
-    xhr.send(JSON.stringify(data));
+        xhr.send(JSON.stringify(data));
+    })
 }
 
 export const login = ({cpf, password}) => {
-    sendData('login',{cpf:cpf,password:password});
+    return new Promise((resolve,reject) => {
+        xhr.open('POST', `${url}/login`, true);
+        xhr.responseType = 'json';
+
+        xhr.onload = function() {
+            resolve(this.response);
+        }
+
+        xhr.send(JSON.stringify({cpf:cpf,password:password}));
+
+    })
+
+}
+
+export const sendFile = (file) => {
+    return new Promise((resolve,reject) => {
+        xhr.open('POST', `${url}/upload`, true);
+        xhr.responseType = 'json';
+
+        xhr.setRequestHeader('X-File-Name', encodeURIComponent(file.name))
+        xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream')
+
+        xhr.onload = function() {
+            resolve(this.response);
+        }
+
+        xhr.send(file);
+    })
 }
