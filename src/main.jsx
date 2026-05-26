@@ -10,6 +10,7 @@ import AdminCadastroAluno from './AdminCadastroAluno.jsx'
 import AdminCadastroInstituicao from './AdminCadastroInstituicao.jsx'
 import Login from './Login.jsx'
 import Editais from './Editais.jsx'
+import Candidaturas from './Candidaturas.jsx'
 
 function Protect({ children, check, redirect }) {
 
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path='/login' element={<Login />} />
         <Route path='/editais' element={<Protect check='isLogged' redirect='/login'><Editais /></Protect>} />
+        <Route path='/candidaturas' element={<Protect check='isLogged' redirect='/login'><Candidaturas /></Protect>} />
 
         <Route path='/admin' element={<Protect check='isAdmin' redirect='/editais'><AdminCadastro /></Protect>} />
         <Route path='/admin/edital' element={<Protect check='isAdmin' redirect='/editais'><AdminCadastroEdital /></Protect>} />

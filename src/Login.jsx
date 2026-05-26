@@ -11,19 +11,37 @@ function Login({ onLoginSuccess }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!isNaN(cpf) && !isNaN(parseFloat(cpf))) {
-      login({cpf:cpf,password:senha})
+    setErro('');
+
+    if (!cpf || !senha) {
+      setErro('Informe CPF e senha.');
+      return;
+    }
+
+    login({ cpf: cpf, password: senha })
       .then((res) => {
-        localStorage.setItem('isLogged',res.valid)
-        localStorage.setItem('isAdmin',res.isAdmin)
-        return res.valid
-      })
-      .then((logged) => {
-        if (logged){
+        if (res.valid) {
+          localStorage.setItem('isLogged', 'true');
+          localStorage.setItem('isAdmin', res.isAdmin ? 'true' : 'false');
+          localStorage.setItem('user', JSON.stringify({
+            cpf,
+            nome: res.nome || '',
+            email: res.email || '',
+            curso: res.curso || '',
+            unidadeEnsino: res.unidadeEnsino || ''
+          }));
           navigate('/editais');
+        } else {
+          setErro('CPF ou senha inválidos.');
+          localStorage.removeItem('isLogged');
+          localStorage.removeItem('isAdmin');
+          localStorage.removeItem('user');
         }
       })
-    }
+      .catch((error) => {
+        console.error('Erro no login:', error);
+        setErro('Erro de conexão ao tentar entrar.');
+      });
   }
 
   

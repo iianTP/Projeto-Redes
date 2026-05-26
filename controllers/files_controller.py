@@ -1,9 +1,7 @@
 import json
-# import os
-# from datetime import datetime
-# from socket import socket
+import os
+from datetime import datetime
 from models import *
-# import pycountry
 from controllers.json_controller import JsonController
 
 class FilesController:
@@ -68,13 +66,135 @@ class FilesController:
             return content, True
         except FileNotFoundError:
             return None, False
+    def _save_json(self, path, data):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
 
-    # def _load_json(self, path, default):
-    #     try:
-    #         with open(path, 'r', encoding='utf-8') as f:
-    #             return json.load(f)
-    #     except (FileNotFoundError, json.JSONDecodeError):
-    #         return default
+    def listarCandidaturas(self, req:dict):
+        payload = req.get('pl') or {}
+        cpf_aluno = payload.get('cpf_aluno')
+
+        candidaturas, _ = self.jc.load_json('data/candidaturas.json', [])
+        editais, _ = self.jc.load_json('data/editais.json', [])
+
+        if cpf_aluno:
+            candidaturas = [c for c in candidaturas if str(c.get('cpf_aluno')) == str(cpf_aluno)]
+
+        for candidatura in candidaturas:
+            edital = next((e for e in editais if str(e.get('id')) == str(candidatura.get('id_edital'))), None)
+            candidatura['edital'] = edital
+
+        response = json.dumps({'success': True, 'candidaturas': candidaturas}).encode('utf-8')
+        req['send'](response, 'application/json', True)
+
+    def criarCandidatura(self, req:dict):
+        payload = req.get('pl') or {}
+        cpf_aluno = payload.get('cpf_aluno')
+        id_edital = payload.get('id_edital')
+        documentos = payload.get('documentos') or []
+
+        if isinstance(documentos, str):
+            try:
+                documentos = json.loads(documentos)
+            except json.JSONDecodeError:
+                documentos = [documentos]
+
+        if not cpf_aluno or not id_edital:
+            response = json.dumps({'success': False, 'error': 'CPF e Edital são obrigatórios.'}).encode('utf-8')
+            req['send'](response, 'application/json', True)
+            return
+
+        candidaturas, _ = self.jc.load_json('data/candidaturas.json', [])
+
+        if any(str(c.get('cpf_aluno')) == str(cpf_aluno) and str(c.get('id_edital')) == str(id_edital) for c in candidaturas):
+            response = json.dumps({'success': False, 'error': 'Você já se candidatou a este edital.'}).encode('utf-8')
+            req['send'](response, 'application/json', True)
+            return
+
+        candidatura = {
+            'id': len(candidaturas) + 1,
+            'cpf_aluno': cpf_aluno,
+            'id_edital': id_edital,
+            'data_candidatura': datetime.now().isoformat(),
+            'status': 'pendente',
+            'documentos': documentos
+        }
+
+        candidaturas.append(candidatura)
+        self._save_json('data/candidaturas.json', candidaturas)
+
+        response = json.dumps({'success': True, 'candidatura': candidatura}).encode('utf-8')
+        req['send'](response, 'application/json', True)
+    def _load_json(self, path, default):
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return default
+
+    def listInstituicoes(self, req:dict):
+        instituicoes = self._load_json('data/instituicoes.json', [])
+        response = json.dumps(instituicoes).encode('utf-8')
+        req['send'](response, 'application/json', True)
+
+    def listEditais(self, req:dict):
+        editais = self._load_json('data/editais.json', [])
+        response = json.dumps(editais).encode('utf-8')
+        req['send'](response, 'application/json', True)
+
+    def listCursos(self, req:dict):
+        cursos = [
+            "Medicina",
+            "Odontologia",
+            "Enfermagem",
+            "Fisioterapia",
+            "Nutrição",
+            "Psicologia",
+            "Educação Física",
+            "Saúde Coletiva",
+            "Terapia Ocupacional",
+            "Engenharia Civil",
+            "Engenharia Mecânica",
+            "Engenharia Elétrica (eletrônica, telecomunicações, eletrotécnica)",
+            "Engenharia da Computação",
+            "Engenharia de Controle e Automação",
+            "Engenharia de Software",
+            "Sistemas de Informação",
+            "Ciência da Computação",
+            "Tecnologia em Logística",
+            "Direito",
+            "Administração",
+            "Administração Pública EAD",
+            "Serviço Social",
+            "Ciências Sociais",
+            "História",
+            "Geografia",
+            "Pedagogia",
+            "Letras",
+            "Ciências Biológicas",
+            "Química",
+            "Física"
+        ]
+        response = json.dumps(cursos).encode('utf-8')
+        req['send'](response, 'application/json', True)
+
+    def listUnidadesEnsino(self, req:dict):
+        unidades_ensino = [
+            "Campus Recife",
+            "Campus Benfica",
+            "Campus Santo Amaro",
+            "Campus Mata Norte (Nazaré da Mata)",
+            "Campus Mata Sul (Palmares)",
+            "Campus Caruaru",
+            "Campus Garanhuns",
+            "Campus Petrolina",
+            "Campus Arcoverde",
+            "Campus Salgueiro",
+            "Campus Serra Talhada"
+        ]
+        response = json.dumps(unidades_ensino).encode('utf-8')
+        req['send'](response, 'application/json', True)
 
     # def _save_json(self, path, data):
     #     os.makedirs(os.path.dirname(path), exist_ok=True)

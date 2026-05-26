@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { downloadFile } from '../src/api';
+import ModalCandidatura from './ModalCandidatura';
 
 function CardEdital({ edital }) {
   const [isAberto, setIsAberto] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDownload = (e, file) => {
     e.stopPropagation();
@@ -33,8 +35,8 @@ function CardEdital({ edital }) {
           </svg>
           Baixar PDF
         </button>
-        {localStorage.getItem('isAdmin') == 'false' && (
-          <button style={styles.applyBtn}>
+        {localStorage.getItem('isLogged') === 'true' && localStorage.getItem('isAdmin') !== 'true' && (
+          <button style={styles.applyBtn} onClick={() => setIsModalOpen(true)}>
             {/* ícone candidatura */}
             <svg style={styles.iconBtn} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -49,7 +51,7 @@ function CardEdital({ edital }) {
       <div style={styles.toggleTrigger} onClick={() => setIsAberto(!isAberto)}>
         <div style={styles.triggerLeft}>
 
-          {/* ícone de documento */}
+          {/* ícone de doc */}
           <svg style={styles.docIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
@@ -60,7 +62,7 @@ function CardEdital({ edital }) {
           <span style={styles.triggerText}>Ver detalhes</span>
         </div>
         
-        {/* seta indicativa */}
+        {}
         <svg 
           style={{ ...styles.arrowIcon, transform: isAberto ? 'rotate(180deg)' : 'rotate(0deg)' }} 
           viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
@@ -102,6 +104,12 @@ function CardEdital({ edital }) {
           </div>
         </div>
       )}
+      <ModalCandidatura
+        isOpen={isModalOpen}
+        edital={edital}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

@@ -52,6 +52,11 @@ function Editais() {
             Cadastrar
           </button>
         )}
+        {localStorage.getItem('isLogged') === 'true' && localStorage.getItem('isAdmin') !== 'true' && (
+          <button style={styles.logoutBtn} onClick={() => window.location.href = '/candidaturas'}>
+            Minhas candidaturas
+          </button>
+        )}
 
         <button style={styles.logoutBtn} onClick={() => {
             localStorage.clear();
