@@ -18,5 +18,15 @@
     "documentos": [
       "aaa.pdf"
     ]
+  },
+  {
+    "id": 3,
+    "cpf_aluno": "12345",
+    "id_edital": "7",
+    "data_candidatura": "2026-05-26T16:53:15.019545",
+    "status": "pendente",
+    "documentos": [
+      "modelo-er-ari.pdf"
+    ]
   }
 ]

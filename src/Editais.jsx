@@ -15,6 +15,8 @@ function Editais() {
   const [filtroCurso, setFiltroCurso] = useState('Todos');
   const [filtroPais, setFiltroPais] = useState('Todos');
   const [filtroStatus, setFiltroStatus] = useState('Todos');
+
+  const navigate = useNavigate()
   
   useEffect(async () => {
     
@@ -37,7 +39,7 @@ function Editais() {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/login');
+    window.location.reload();
   };
 
   return (
