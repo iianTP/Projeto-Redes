@@ -47,14 +47,15 @@ function AdminCadastroInstituicao() {
   }
 
   return (
-    <main id="center">
-      <section classNome="hero">
-        <h1>Cadastrar Instituição</h1>
+    <main id="center" className="container">
+      <section>
+        <h1 className="sectionTitle">Cadastrar Instituição</h1>
       </section>
 
-      <form classNome="upload-form" onSubmit={handleSubmit}>
+      <form className="upload-form" onSubmit={handleSubmit}>
         <label>
           Nome da instituição
+
           <input
             type="text"
             value={nome}
@@ -63,16 +64,20 @@ function AdminCadastroInstituicao() {
           />
         </label>
 
-        <button type="submit" classNome="counter">
+        <button type="submit" className="botao">
           Cadastrar instituição
         </button>
+
+        <button
+          type="button"
+          className="botao"
+          onClick={() => navigate('/admin')}
+        >
+          Voltar para painel admin
+        </button>
+
+        {status && <p className="status-message">{status}</p>}
       </form>
-
-      {status && <p classNome="status-message">{status}</p>}
-
-      <button type="button" classNome="counter" onClick={() => navigate('/admin')}>
-        Voltar para painel admin
-      </button>
     </main>
   )
 }

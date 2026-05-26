@@ -1,23 +1,22 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './App.css'
 
 function AdminCadastro() {
-  const [editais, setEditais] = useState([])
-  const [status, setStatus] = useState('')
-
   return (
-    <main id="center">
-      <section className="hero">
-        <h1>Área de Cadastramento</h1>
+    <main id="center" className="container">
+      <section>
+        <h1 className="sectionTitle">Área de Cadastramento</h1>
+
         <div className="cadastros">
-          <Link to="/admin/edital" className="counter">
+          <Link to="/admin/edital" className="botao">
             Cadastrar Edital
           </Link>
-          <Link to="/admin/aluno" className="counter">
+
+          <Link to="/admin/aluno" className="botao">
             Cadastrar Aluno
           </Link>
-          <Link to="/admin/instituicao" className="counter">
+
+          <Link to="/admin/instituicao" className="botao">
             Cadastrar Instituição
           </Link>
         </div>
@@ -25,8 +24,8 @@ function AdminCadastro() {
 
       <div className="ticks"></div>
 
-      <Link to="/" className="counter">
-        Voltar para Home
+      <Link to="/editais" className="botao">
+        Voltar para página de editais
       </Link>
     </main>
   )

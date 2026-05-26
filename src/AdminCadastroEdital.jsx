@@ -106,14 +106,15 @@ function AdminCadastroEdital() {
   }
 
   return (
-    <main id="center">
-      <section className="hero">
-        <h1>Cadastrar Edital</h1>
+    <main id="center" className="container">
+      <section>
+        <h1 className="sectionTitle">Cadastrar Edital</h1>
       </section>
 
       <form className="upload-form" onSubmit={handleSubmit}>
         <label>
           Título do edital
+
           <input
             type="text"
             value={titulo}
@@ -121,10 +122,17 @@ function AdminCadastroEdital() {
             placeholder="Título do edital"
           />
         </label>
+
         <label>
           Instituição
-          <select value={instituicao} onChange={(e) => setInstituicao(e.target.value)}>
+
+          <select
+            className="select"
+            value={instituicao}
+            onChange={(e) => setInstituicao(e.target.value)}
+          >
             <option value="">Selecione</option>
+
             {Object.values(instituicoes).map((item) => (
               <option key={item.nome} value={item.nome}>
                 {item.nome}
@@ -135,8 +143,14 @@ function AdminCadastroEdital() {
 
         <label>
           País
-          <select value={pais} onChange={(e) => setPais(e.target.value)}>
+
+          <select
+            className="select"
+            value={pais}
+            onChange={(e) => setPais(e.target.value)}
+          >
             <option value="">Selecione</option>
+
             {paises.map((paisItem) => (
               <option key={paisItem} value={paisItem}>
                 {paisItem}
@@ -145,42 +159,55 @@ function AdminCadastroEdital() {
           </select>
         </label>
 
-        <fieldset className="upload-form">
-          <legend>Cursos aceitos</legend>
-          {cursos.map((curso) => (
-            <label key={curso}>
-              <input
-                type="checkbox"
-                value={curso}
-                checked={cursoSelecionado.includes(curso)}
-                onChange={handleCursoChange}
-              />
-              {curso}
-            </label>
-          ))}
+        <fieldset className="filterSection">
+          <legend className="sectionTitle">
+            Cursos aceitos
+          </legend>
+
+          <div className="cadastros">
+            {cursos.map((curso) => (
+              <label key={curso}>
+                <input
+                  type="checkbox"
+                  value={curso}
+                  checked={cursoSelecionado.includes(curso)}
+                  onChange={handleCursoChange}
+                />
+
+                {curso}
+              </label>
+            ))}
+          </div>
         </fieldset>
 
         <label>
           Arquivo do edital (PDF)
+
           <input
             type="file"
             accept="application/pdf"
-            onChange={(e) => setPdf(e.target.files?.[0] ?? null)}
+            onChange={(e) =>
+              setPdf(e.target.files?.[0] ?? null)
+            }
           />
         </label>
 
-        <button type="submit" className="counter">
+        <button type="submit" className="botao">
           Cadastrar edital
         </button>
+
+        <Link to="/admin" className="botao">
+          Voltar para painel admin
+        </Link>
+
+        {status && (
+          <p className="status-message">
+            {status}
+          </p>
+        )}
       </form>
-
-      {status && <p className="status-message">{status}</p>}
-
-      <Link to="/admin" className="counter">
-        Voltar para painel admin
-      </Link>
     </main>
   )
-}
+} 
 
 export default AdminCadastroEdital

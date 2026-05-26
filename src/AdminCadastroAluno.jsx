@@ -82,14 +82,15 @@ function AdminCadastroAluno() {
     // }
 
   }
+  
 
   return (
-    <main id="center">
-      <section classnome="hero">
-        <h1>Cadastrar Aluno</h1>
+    <main id="center" className="container">
+      <section>
+        <h1 className="sectionTitle">Cadastrar Aluno</h1>
       </section>
 
-      <form classnome="upload-form" onSubmit={handleSubmit}>
+      <form className="upload-form" onSubmit={handleSubmit}>
         <label>
           Nome completo
           <input
@@ -122,8 +123,13 @@ function AdminCadastroAluno() {
 
         <label>
           Unidade de Ensino
-          <select value={unidade_ensino} onChange={(e) => setUnidadeEnsino(e.target.value)}>
+          <select
+            className="select"
+            value={unidade_ensino}
+            onChange={(e) => setUnidadeEnsino(e.target.value)}
+          >
             <option value="">Selecione</option>
+
             {unidades_ensino.map((item) => (
               <option key={item} value={item}>
                 {item}
@@ -134,8 +140,13 @@ function AdminCadastroAluno() {
 
         <label>
           Curso
-          <select value={curso} onChange={(e) => setCurso(e.target.value)}>
+          <select
+            className="select"
+            value={curso}
+            onChange={(e) => setCurso(e.target.value)}
+          >
             <option value="">Selecione</option>
+
             {cursos.map((item) => (
               <option key={item} value={item}>
                 {item}
@@ -144,14 +155,20 @@ function AdminCadastroAluno() {
           </select>
         </label>
 
-        <button type="submit" classnome="counter">
+        <button type="submit" className="botao">
           Cadastrar aluno
         </button>
-      </form>
 
-      <button type="button" classnome="counter" onClick={() => navigate('/admin')}>
-        Voltar para painel admin
-      </button>
+        <button
+          type="button"
+          className="botao"
+          onClick={() => navigate('/admin')}
+        >
+          Voltar para painel admin
+        </button>
+
+        {status && <p className="status-message">{status}</p>}
+      </form>
     </main>
   )
 }
