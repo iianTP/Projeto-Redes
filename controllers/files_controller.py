@@ -82,10 +82,11 @@ class FilesController:
             candidaturas = [c for c in candidaturas if str(c.get('cpf_aluno')) == str(cpf_aluno)]
 
         for candidatura in candidaturas:
-            edital = next((e for e in editais if str(e.get('id')) == str(candidatura.get('id_edital'))), None)
+            edital = next((e for e in editais.values() if str(e.get('id')) == str(candidatura.get('id_edital'))), None)
             candidatura['edital'] = edital
 
         response = json.dumps({'success': True, 'candidaturas': candidaturas}).encode('utf-8')
+        print(response)
         req['send'](response, 'application/json', True)
 
     def criarCandidatura(self, req:dict):

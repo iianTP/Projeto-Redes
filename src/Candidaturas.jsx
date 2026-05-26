@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getCandidaturas } from './api';
 
 function Candidaturas() {
   const [candidaturas, setCandidaturas] = useState([]);
@@ -18,28 +19,39 @@ function Candidaturas() {
   }, [navigate]);
 
   const carregarCandidaturas = async () => {
-    try {
-      const response = await fetch('http://127.0.0.1:8080/candidatura/listar', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ cpf_aluno: user.cpf }),
-      });
 
-      const data = await response.json();
+    getCandidaturas(user.cpf)
+    .then((res) => {
+      setCandidaturas(res.candidaturas)
+    })
+    .catch(err => setErro(err))
+    .finally(() => setCarregando(false))
 
-      if (data.success) {
-        setCandidaturas(data.candidaturas || []);
-      } else {
-        setErro(data.error || 'Erro ao carregar candidaturas');
-      }
-    } catch (error) {
-      console.error('Erro:', error);
-      setErro('Erro de conexão com o servidor');
-    } finally {
-      setCarregando(false);
-    }
+    // try {
+    //   const response = await fetch('http://127.0.0.1:8080/candidatura/listar', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ cpf_aluno: user.cpf }),
+    //   });
+
+    //   const data = await response.json();
+
+    //   if (data.success) {
+    //     setCandidaturas(data.candidaturas || []);
+    //   } else {
+    //     setErro(data.error || 'Erro ao carregar candidaturas');
+    //   }
+    // } catch (error) {
+    //   console.error('Erro:', error);
+    //   setErro('Erro de conexão com o servidor');
+    // } finally {
+    //   setCarregando(false);
+    // }
+
+
+
   };
 
   const handleLogout = () => {

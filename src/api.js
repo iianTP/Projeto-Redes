@@ -42,22 +42,26 @@ export const getData = (data) => {
 
 }
 
-export const getEditais = () => {
+export const getCandidaturas = (cpf) => {
     return new Promise((resolve,reject) => {
-        xhr.open('GET', `${url}/data/editais.json`, true);
+        xhr.open('GET', `${url}/candidatura/listar`, true);
         xhr.responseType = 'json';
 
         xhr.onload = function() {
-            resolve(this.response);
+            console.log(this.response)
+            if (this.response.success){
+                resolve(this.response);
+            } else {
+                reject(new Error(this.response.error));
+            }
         };
 
         xhr.onerror = function() {
             console.error('Erro na conexão com o servidor');
         };
 
-        xhr.send();
+        xhr.send(cpf);
     })
-
 }
 
 // POST
