@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { getData, sendData } from './api'
+import { useNavigate } from 'react-router-dom'
 
 function AdminCadastroAluno() {
+  const navigate = useNavigate()
+
   const [unidades_ensino, setUnidadesEnsino] = useState([])
   const [cursos, setCursos] = useState([])
 
@@ -162,7 +165,10 @@ function AdminCadastroAluno() {
         <button
           type="button"
           className="botao"
-          onClick={() => navigate('/admin')}
+          onClick={() =>
+            (window.location.href =
+              '/admin')
+          }
         >
           Voltar para painel admin
         </button>

@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom'
 import SelectCountryList from 'react-select-country-list'
 import './App.css'
 import { getData, sendData, sendFile } from './api'
+import { useNavigate } from 'react-router-dom'
 
-function AdminCadastroEdital() {
-    
+
+function AdminCadastroEdital() {  
   const [instituicoes, setInstituicoes] = useState([])
   const [cursos, setCursos] = useState([])
   const [paises, setPaises] = useState([])
@@ -196,9 +197,16 @@ function AdminCadastroEdital() {
           Cadastrar edital
         </button>
 
-        <Link to="/admin" className="botao">
+        <button
+          type="button"
+          className="botao"
+          onClick={() =>
+            (window.location.href =
+              '/admin')
+          }
+        >
           Voltar para painel admin
-        </Link>
+        </button>
 
         {status && (
           <p className="status-message">
