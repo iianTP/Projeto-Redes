@@ -26,16 +26,6 @@ function AdminCadastroAluno() {
     .then(setCursos)
     .catch(() => setStatus('Não foi possível carregar os cursos.'))
 
-    // fetch('http://127.0.0.1:8080/admin/unidades-ensino')
-    //   .then((res) => res.json())
-    //   .then(setUnidadesEnsino)
-    //   .catch(() => setStatus('Não foi possível carregar as unidades de ensino.'))
-
-    // fetch('http://127.0.0.1:8080/admin/cursos')
-    //   .then((res) => res.json())
-    //   .then(setcursos)
-    //   .catch(() => setStatus('Não foi possível carregar os cursos.'))
-
   }, [])
 
   const handleSubmit = async (event) => {
