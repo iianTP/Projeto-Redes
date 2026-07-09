@@ -2,9 +2,11 @@ import json
 import os
 from datetime import datetime
 from controllers.json_controller import JsonController
+from db_connect import Database
 
 class FilesController:
     def __init__(self):
+        self.db = Database()
         self.jc = JsonController()
         self.content_types = {
             'html': 'text/html',

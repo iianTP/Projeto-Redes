@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCandidaturas } from './api';
+import { getCandidaturas, query } from './api';
 
 function Candidaturas() {
   const [candidaturas, setCandidaturas] = useState([]);
@@ -20,12 +20,15 @@ function Candidaturas() {
 
   const carregarCandidaturas = () => {
 
-    getCandidaturas(user.cpf)
-    .then((res) => {
-      setCandidaturas(res.candidaturas)
-    })
-    .catch(err => setErro(err))
-    .finally(() => setCarregando(false))
+    query('candidatura_por_aluno','22233344455').then(res => {
+      setCandidaturas(res)}).finally(() => setCarregando(false))
+
+    // getCandidaturas(user.cpf)
+    // .then((res) => {
+    //   setCandidaturas(res.candidaturas)
+    // })
+    // .catch(err => setErro(err))
+    // .finally(() => setCarregando(false))
 
   };
 
@@ -116,11 +119,11 @@ function Candidaturas() {
                 <div className="cardHeader">
                   <div className="cardTitle">
                     <h4 className="editalTitulo">
-                      {candidatura.edital?.titulo || 'Edital indisponível'}
+                      {candidatura.titulo || 'Edital indisponível'}
                     </h4>
 
                     <p className="editalInfo">
-                      {candidatura.edital?.instituicao} · {candidatura.edital?.pais}
+                      {candidatura.instituicao} · {candidatura.pais}
                     </p>
                   </div>
 
@@ -145,15 +148,15 @@ function Candidaturas() {
                       <div className="detailItem">
                         <span className="detailLabel">Período do Edital:</span>
                         <span className="detailValue">
-                          {new Date(candidatura.edital.dataInicio).toLocaleDateString('pt-BR')} até{" "}
-                          {new Date(candidatura.edital.dataFim).toLocaleDateString('pt-BR')}
+                          {new Date(candidatura.dataInicio).toLocaleDateString('pt-BR')} até{" "}
+                          {new Date(candidatura.dataFim).toLocaleDateString('pt-BR')}
                         </span>
                       </div>
 
                       <div className="detailItem">
                         <span className="detailLabel">Descrição:</span>
                         <span className="detailValue">
-                          {candidatura.edital.descricao}
+                          {candidatura.descricao}
                         </span>
                       </div>
                     </>

@@ -43,6 +43,26 @@ export const getData = (data) => {
 }
 
 
+export const query = (data,cond='') => {
+    return new Promise((resolve,reject) => {
+        xhr.open('POST', `${url}/query/${data}`, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.responseType = 'json';
+
+        xhr.onload = function() {
+            resolve(this.response);
+        };
+
+        xhr.onerror = function() {
+            console.error('Erro na conexão com o servidor');
+        };
+
+        xhr.send(JSON.stringify({cond:cond}));
+    })
+
+}
+
+
 
 // POST
 export const getCandidaturas = (cpf) => {

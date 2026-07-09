@@ -10,5 +10,13 @@
   "33333333332": {
     "pw": "$2b$12$r67ecRpuUNiq01X6P40OT.wAsYPnfNn60bAu9ESK0JgChL6PtDZj.",
     "isAdmin": false
+  },
+  "85896984763": {
+    "pw": "$2b$12$aRJsAgWUIQfO9dCzQ/Mh8e5M4Rtm80kfEfT.szwQtPdSj.ykTri3q",
+    "isAdmin": false
+  },
+  "64738564738": {
+    "pw": "$2b$12$oPPiF3GkoM.Lt8P/kJiPQ.WAf19k8qJX.yaKor9HJAICIqEDlfiiy",
+    "isAdmin": false
   }
 }

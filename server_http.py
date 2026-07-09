@@ -2,6 +2,7 @@ import socket, json
 from controllers.files_controller import FilesController
 from controllers.user_controller import UserController
 from controllers.cadastro_controller import CadastroController
+from db_connect import Database
 
 class WebServer:
 	def __init__(self):
@@ -9,6 +10,7 @@ class WebServer:
 		self.fc = FilesController()
 		self.uc = UserController()
 		self.cc = CadastroController()
+		self.db = Database()
 		self.exit = False
 
 		self.pages = [
@@ -23,7 +25,8 @@ class WebServer:
             'GET':[
                 ('assets', self.fc.getFile), # para carregamento de assets da build
                 ('files',  self.fc.getFile),  # para envio INDIVIDUAL de arquivos da pasta 'files'
-				('data',self.fc.getFile)
+				('data', self.fc.getFile)
+				
             ],
             'POST':[
 				('login', self.uc.login),
@@ -33,6 +36,7 @@ class WebServer:
 				('admin/cadastrar-edital', lambda req: self.cc.cadastrar(req,'edital')),
 				('admin/cadastrar-aluno', lambda req: self.cc.cadastrar(req,'aluno')),
 				('admin/cadastrar-instituicao', lambda req: self.cc.cadastrar(req,'instituicao')),
+				('query', lambda req: self.db.get_query_data(query_file=req['ep'].split('/')[-1],send=req['send'],condition=f'{req['pl']['cond']}'))
 			],
             'PUT':[],
             'DELETE':[]

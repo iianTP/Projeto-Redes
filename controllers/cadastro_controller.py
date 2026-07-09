@@ -1,9 +1,11 @@
 import datetime, bcrypt
 from controllers.json_controller import JsonController
+from db_connect import Database
 
 class CadastroController:
     def __init__(self):
         self.jc = JsonController()
+        self.db = Database()
 
         self.info = {
             'instituicao': {
@@ -80,11 +82,20 @@ class CadastroController:
 
         self.jc.save_json(json_path,data)
 
-        if type == 'aluno': self.createUser(payload['cpf'])
+        if type == 'aluno':
+            self.createUser(payload['cpf'])
+
+
+            pw = bcrypt.hashpw('12345'.encode('utf-8'),bcrypt.gensalt()).decode()
+
+            data = (payload['cpf'], payload['nome'], 1.23, 1, payload['email'], payload['instituicao'], pw)
+
+            self.db.insert('aluno',data)
         
         req['send'](response,'application/json',True)
 
     def createUser(self,cpf):
+
         users,_ = self.jc.load_json('data/usuarios.json')
         
         users[cpf] = {

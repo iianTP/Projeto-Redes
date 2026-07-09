@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { getData, sendData } from './api'
+import { getData, sendData, query } from './api'
 import { useNavigate } from 'react-router-dom'
 
 function AdminCadastroAluno() {
@@ -22,7 +22,7 @@ function AdminCadastroAluno() {
     .then(setUnidadesEnsino)
     .catch(() => {setStatus('Não foi possível carregar as unidades de ensino.')})
 
-    await getData('cursos.json')
+    await query('cursos')
     .then(setCursos)
     .catch(() => setStatus('Não foi possível carregar os cursos.'))
 

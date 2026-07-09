@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CardEdital from '../components/CardEdital';
 import SelectCountryList from 'react-select-country-list';
-import { getData } from'./api.js';
+import { getData,query } from'./api.js';
 import { useNavigate, Navigate } from 'react-router-dom';
 
 function Editais() {
@@ -20,9 +20,9 @@ function Editais() {
   
   useEffect(async () => {
     
-    await getData('editais.json').then((res) => setEditais(Object.values(res)));
-    await getData('cursos.json').then((res) => setCursos(res));
-    await getData('instituicoes.json').then((res) => setInstituicoes(Object.values(res)));
+    await query('info_editais').then((res) => setEditais(res) ); //Object.values(res)
+    // await getData('cursos.json').then((res) => setCursos(res));
+    await query('instituicoes').then((res) => setInstituicoes(res)); //Object.values(res)
 
     const options = SelectCountryList().getData()
     const paisesNomes = options.map((item) => item.label)
@@ -32,7 +32,7 @@ function Editais() {
   const editaisFiltrados = editais.filter(edital => 
     edital.titulo.toLowerCase().includes(busca.toLowerCase()) &&
     (filtroInstiticao === 'Todos' || edital.instituicao === filtroInstiticao) &&
-    (filtroCurso      === 'Todos' || edital.curso       === filtroCurso) &&
+    // (filtroCurso      === 'Todos' || edital.curso       === filtroCurso) &&
     (filtroPais       === 'Todos' || edital.pais        === filtroPais) &&
     (filtroStatus     === 'Todos' || edital.statusText  === filtroStatus)
   );
@@ -164,7 +164,7 @@ function Editais() {
               ))}
             </select>
 
-            <select
+            {/* <select
               className="select"
               onChange={(e) =>
                 setFiltroCurso(
@@ -184,7 +184,7 @@ function Editais() {
                   {curso}
                 </option>
               ))}
-            </select>
+            </select> */}
 
             <select
               className="select"
